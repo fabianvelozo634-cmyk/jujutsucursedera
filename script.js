@@ -9,7 +9,6 @@ for (let i = 0; i < particleCount; i++) {
     particle.style.animationDelay = Math.random() * 6 + 's';
     particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
     
-    // Variar colores de partículas
     const colors = [
         'rgba(138, 43, 226, 0.6)',
         'rgba(255, 0, 102, 0.6)',
@@ -34,6 +33,54 @@ const quejasCloseBtn = document.getElementById('quejasCloseBtn');
 const quejasModalCloseBtn = document.getElementById('quejasModalCloseBtn');
 const copyEmailBtn = document.getElementById('copyEmailBtn');
 
+// Chibi Assistant
+const chibiAssistant = document.getElementById('chibiAssistant');
+const chibiIcon = document.getElementById('chibiIcon');
+const speechBubble = document.getElementById('speechBubble');
+
+// Mensajes aleatorios para el chibi
+const chibiMessages = [
+    "¡Hola! ¿Necesitas ayuda? 😊",
+    "¡Bienvenido a Cursed Era II! ✨",
+    "¿Listo para una aventura? 🎭",
+    "¡Haz click para chatear conmigo! 💬",
+    "¿Tienes alguna pregunta? 🤔",
+    "¡Explora el servidor! ⚔️",
+    "¡Despierta tu energía maldita! 🌟",
+    "¿Necesitas orientación? Estoy aquí 💜"
+];
+
+let currentMessageIndex = 0;
+
+// Mostrar burbuja de diálogo aleatoriamente
+function showRandomMessage() {
+    currentMessageIndex = Math.floor(Math.random() * chibiMessages.length);
+    speechBubble.textContent = chibiMessages[currentMessageIndex];
+    speechBubble.classList.add('show');
+    
+    setTimeout(() => {
+        speechBubble.classList.remove('show');
+    }, 4000);
+}
+
+// Mostrar mensaje inicial después de 2 segundos
+setTimeout(showRandomMessage, 2000);
+
+// Mostrar mensaje aleatorio cada 15 segundos
+setInterval(showRandomMessage, 15000);
+
+// Click en el chibi - redirigir al chat IA
+chibiIcon.addEventListener('click', function() {
+    // Aquí pon el link de tu chat IA cuando lo tengas
+    // Por ahora mostramos un modal
+    modalTitle.textContent = 'Cursed IA';
+    modalText.textContent = '¡La inteligencia artificial maldita está en desarrollo! Pronto podrás chatear con nuestro asistente AI especializado en Jujutsu Kaisen. ¡Mantente atento!';
+    modal.style.display = 'block';
+    
+    // Cuando tengas el link del chat, descomenta esto y pon tu URL:
+    // window.open('TU_LINK_DEL_CHAT_IA', '_blank');
+});
+
 // Mensajes personalizados para cada sección
 const sectionMessages = {
     'sugerencias': {
@@ -44,17 +91,13 @@ const sectionMessages = {
         title: 'Servidor',
         text: '¡El servidor estará disponible muy pronto! Aquí podrás conectarte con otros jugadores y formar parte de la comunidad de Cursed Era II.'
     },
-    'cursed-ia': {
-        title: 'Cursed IA',
-        text: '¡La inteligencia artificial maldita está en desarrollo! Esta revolucionaria función cambiará tu experiencia. Mantente atento a las actualizaciones.'
-    },
     'reclamar': {
         title: 'Reclamar',
         text: '¡Sección de reclamos en construcción! Pronto podrás reclamar recompensas, códigos especiales y más. ¡No te lo pierdas!'
     }
 };
 
-// Agregar eventos a los links de navegación (excepto quejas)
+// Agregar eventos a los links de navegación
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', function(e) {
         const section = this.getAttribute('data-section');
@@ -69,6 +112,18 @@ document.querySelectorAll('.nav-link').forEach(link => {
     });
 });
 
+// También para el botón CTA
+document.querySelector('.cta-button')?.addEventListener('click', function(e) {
+    const section = this.getAttribute('data-section');
+    if (section) {
+        e.preventDefault();
+        const message = sectionMessages[section];
+        modalTitle.textContent = message.title;
+        modalText.textContent = message.text;
+        modal.style.display = 'block';
+    }
+});
+
 // Abrir modal de quejas
 quejasBtn.addEventListener('click', function(e) {
     e.preventDefault();
@@ -79,10 +134,8 @@ quejasBtn.addEventListener('click', function(e) {
 copyEmailBtn.addEventListener('click', function() {
     const email = 'cursed.era2@gmail.com';
     
-    // Método moderno de copiar al portapapeles
     if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(email).then(function() {
-            // Cambiar texto del botón temporalmente
             copyEmailBtn.textContent = '✅ ¡Copiado!';
             copyEmailBtn.style.background = 'linear-gradient(45deg, #00ff00, #00cc00)';
             
@@ -94,7 +147,6 @@ copyEmailBtn.addEventListener('click', function() {
             alert('Email: cursed.era2@gmail.com');
         });
     } else {
-        // Fallback para navegadores antiguos
         const textArea = document.createElement('textarea');
         textArea.value = email;
         textArea.style.position = 'fixed';
@@ -119,7 +171,7 @@ copyEmailBtn.addEventListener('click', function() {
     }
 });
 
-// Cerrar modal de desarrollo
+// Cerrar modales
 closeBtn.onclick = function() {
     modal.style.display = 'none';
 }
@@ -128,7 +180,6 @@ modalCloseButton.onclick = function() {
     modal.style.display = 'none';
 }
 
-// Cerrar modal de quejas
 quejasCloseBtn.onclick = function() {
     quejasModal.style.display = 'none';
 }
@@ -137,7 +188,6 @@ quejasModalCloseBtn.onclick = function() {
     quejasModal.style.display = 'none';
 }
 
-// Cerrar modales al hacer clic fuera
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = 'none';
