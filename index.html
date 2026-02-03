@@ -5,6 +5,434 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jujutsu Kaisen Cursed Era II</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* ========== CHAT FLOTANTE DEFINITIVO ========== */
+        .floating-chat {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 400px;
+            height: 600px;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2a 100%);
+            border: 3px solid #8a2be2;
+            border-radius: 20px;
+            box-shadow: 
+                0 0 50px rgba(138, 43, 226, 0.7),
+                0 10px 40px rgba(0, 0, 0, 0.8);
+            display: none;
+            flex-direction: column;
+            z-index: 9998;
+            animation: slideInLeft 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(10px);
+        }
+
+        .floating-chat.active {
+            display: flex;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-100px) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        .floating-chat-header {
+            background: linear-gradient(135deg, #2a0a3a, #1a0a2a);
+            padding: 18px 20px;
+            border-bottom: 2px solid #8a2be2;
+            border-radius: 17px 17px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-chat-header-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .floating-chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 3px solid #00ffff;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.6),
+                0 0 40px rgba(138, 43, 226, 0.4);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            position: relative;
+            animation: avatarGlow 3s ease-in-out infinite;
+        }
+
+        .floating-chat-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        @keyframes avatarGlow {
+            0%, 100% {
+                box-shadow: 
+                    0 0 20px rgba(0, 255, 255, 0.6),
+                    0 0 40px rgba(138, 43, 226, 0.4);
+            }
+            50% {
+                box-shadow: 
+                    0 0 30px rgba(0, 255, 255, 0.9),
+                    0 0 60px rgba(138, 43, 226, 0.7);
+            }
+        }
+
+        .floating-chat-status {
+            width: 12px;
+            height: 12px;
+            background: #00ff00;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            border: 2px solid #000;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .floating-chat-title {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .floating-chat-title h3 {
+            color: #00ffff;
+            font-size: 1.2rem;
+            margin: 0;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .floating-chat-title p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.75rem;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .floating-chat-close {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: rgba(255, 0, 102, 0.2);
+            border: 2px solid #ff0066;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            line-height: 1;
+        }
+
+        .floating-chat-close:hover {
+            background: rgba(255, 0, 102, 0.6);
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 0, 102, 0.8);
+        }
+
+        .floating-chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .floating-chat-messages::-webkit-scrollbar-track {
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: 10px;
+        }
+
+        .floating-chat-messages::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #8a2be2, #ff0066);
+            border-radius: 10px;
+        }
+
+        .floating-chat-messages::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #a855f7, #ff1a75);
+        }
+
+        .floating-welcome {
+            text-align: center;
+            padding: 30px 15px;
+        }
+
+        .floating-welcome h4 {
+            color: #00ffff;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.6);
+        }
+
+        .floating-welcome p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .floating-suggestions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .floating-suggestion-btn {
+            padding: 12px 18px;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.4), rgba(255, 0, 102, 0.4));
+            border: 2px solid #8a2be2;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-family: Arial, sans-serif;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .floating-suggestion-btn:hover {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.6), rgba(255, 0, 102, 0.6));
+            transform: translateX(8px) scale(1.02);
+            box-shadow: 0 5px 20px rgba(138, 43, 226, 0.5);
+            border-color: #00ffff;
+        }
+
+        .floating-message {
+            display: flex;
+            gap: 10px;
+            animation: fadeInMessage 0.4s ease;
+        }
+
+        @keyframes fadeInMessage {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .floating-message.user {
+            flex-direction: row-reverse;
+        }
+
+        .floating-message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-message.user .floating-message-avatar {
+            background: linear-gradient(135deg, #ff0066, #8a2be2);
+        }
+
+        .floating-message.ai .floating-message-avatar {
+            background: linear-gradient(135deg, #8a2be2, #00ffff);
+        }
+
+        .floating-message-content {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-message.user .floating-message-content {
+            background: linear-gradient(135deg, rgba(255, 0, 102, 0.5), rgba(138, 43, 226, 0.5));
+            border: 2px solid rgba(255, 0, 102, 0.7);
+            color: #fff;
+            border-radius: 15px 15px 3px 15px;
+        }
+
+        .floating-message.ai .floating-message-content {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.5), rgba(0, 255, 255, 0.5));
+            border: 2px solid rgba(138, 43, 226, 0.7);
+            color: #fff;
+            border-radius: 15px 15px 15px 3px;
+        }
+
+        .floating-message-time {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .floating-typing {
+            display: flex;
+            gap: 5px;
+            padding: 12px 16px;
+        }
+
+        .floating-typing-dot {
+            width: 8px;
+            height: 8px;
+            background: linear-gradient(135deg, #8a2be2, #00ffff);
+            border-radius: 50%;
+            animation: typingDot 1.4s infinite;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+        }
+
+        .floating-typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .floating-typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingDot {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.6;
+            }
+            30% {
+                transform: translateY(-12px);
+                opacity: 1;
+            }
+        }
+
+        .floating-chat-input {
+            padding: 18px;
+            border-top: 2px solid #8a2be2;
+            display: flex;
+            gap: 10px;
+            background: linear-gradient(135deg, rgba(10, 10, 26, 0.9), rgba(26, 10, 42, 0.9));
+            border-radius: 0 0 17px 17px;
+        }
+
+        .floating-input {
+            flex: 1;
+            padding: 12px 18px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid #8a2be2;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 0.95rem;
+            font-family: Arial, sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .floating-input:focus {
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .floating-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .floating-send-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff0066, #8a2be2);
+            border: none;
+            color: #fff;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.5);
+        }
+
+        .floating-send-btn:hover:not(:disabled) {
+            transform: scale(1.15) rotate(15deg);
+            box-shadow: 0 6px 25px rgba(138, 43, 226, 0.8);
+        }
+
+        .floating-send-btn:active:not(:disabled) {
+            transform: scale(0.95);
+        }
+
+        .floating-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .error-message-floating {
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.4), rgba(255, 50, 0, 0.4));
+            border: 2px solid rgba(255, 0, 0, 0.7);
+            padding: 12px 16px;
+            border-radius: 10px;
+            color: #fff;
+            text-align: center;
+            font-size: 0.85rem;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .floating-chat {
+                width: calc(100% - 30px);
+                height: calc(100vh - 120px);
+                left: 15px;
+                bottom: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .floating-chat {
+                width: calc(100% - 20px);
+                height: calc(100vh - 100px);
+                left: 10px;
+                bottom: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Pantalla de carga -->
@@ -42,17 +470,68 @@
 
     <!-- Menú de navegación -->
     <nav class="navbar">
-    <div class="nav-container">
-        <a href="#" class="nav-link" data-section="sugerencias">Sugerencias</a>
-        <a href="#" class="nav-link" id="quejasBtn">Quejas</a>
-        <a href="https://discord.gg/NfrSQ922Hs" target="_blank" class="nav-link">Servidor</a>
-        <a href="#" class="nav-link" data-section="reclamar">Reclamar</a>
-        <a href="#" class="nav-link" id="energyGameBtn">⚡ Energía</a>
-        <a href="#" class="nav-link" id="statsBtn">📊 Stats</a>
-        <a href="#" class="nav-link" id="secretsBtn">🔮 Secretos</a>
-        <a href="#" class="nav-link" id="resetDevice">⚙️</a>
+        <div class="nav-container">
+            <a href="#" class="nav-link" data-section="sugerencias">Sugerencias</a>
+            <a href="#" class="nav-link" id="quejasBtn">Quejas</a>
+            <a href="https://discord.gg/NfrSQ922Hs" target="_blank" class="nav-link">Servidor</a>
+            <a href="#" class="nav-link" data-section="reclamar">Reclamar</a>
+            <a href="#" class="nav-link" id="energyGameBtn">⚡ Energía</a>
+            <a href="#" class="nav-link" id="statsBtn">📊 Stats</a>
+            <a href="#" class="nav-link" id="secretsBtn">🔮 Secretos</a>
+            <a href="#" class="nav-link" id="resetDevice">⚙️</a>
+        </div>
+    </nav>
+
+    <!-- Chat Flotante -->
+    <div class="floating-chat" id="floatingChat">
+        <div class="floating-chat-header">
+            <div class="floating-chat-header-content">
+                <div class="floating-chat-avatar">
+                    <img src="https://cdn.discordapp.com/attachments/1465647525766631585/1468389070169440319/s.jpg?ex=6983d763&is=698285e3&hm=7ae917753c12f738264191cf56ee65ec8c32d9d5df97a9e6a816b0b528a5d86d&" alt="Gojo">
+                    <div class="floating-chat-status"></div>
+                </div>
+                <div class="floating-chat-title">
+                    <h3>Cursed IA</h3>
+                    <p>Conectado ⚡</p>
+                </div>
+            </div>
+            <div class="floating-chat-close" id="closeChatBtn">×</div>
+        </div>
+
+        <div class="floating-chat-messages" id="floatingChatMessages">
+            <div class="floating-welcome">
+                <h4>¡Bienvenido! 🔮</h4>
+                <p>Soy tu asistente especializado en Jujutsu Kaisen y Cursed Era II. Pregúntame lo que quieras sobre el anime, manga, personajes, o el servidor de roleplay.</p>
+                <div class="floating-suggestions">
+                    <button class="floating-suggestion-btn" onclick="sendFloatingSuggestion('¿Qué es Cursed Era II?')">
+                        💬 ¿Qué es Cursed Era II?
+                    </button>
+                    <button class="floating-suggestion-btn" onclick="sendFloatingSuggestion('Háblame sobre Gojo Satoru')">
+                        ⚡ Sobre Gojo Satoru
+                    </button>
+                    <button class="floating-suggestion-btn" onclick="sendFloatingSuggestion('¿Cómo funciona el sistema de stats?')">
+                        📊 Sistema de stats
+                    </button>
+                    <button class="floating-suggestion-btn" onclick="sendFloatingSuggestion('Explícame las técnicas malditas')">
+                        🔮 Técnicas malditas
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="floating-chat-input">
+            <input 
+                type="text" 
+                class="floating-input" 
+                id="floatingInput" 
+                placeholder="Escribe tu mensaje..."
+                autocomplete="off"
+            >
+            <button class="floating-send-btn" id="floatingSendBtn" onclick="sendFloatingMessage()">
+                ➤
+            </button>
+        </div>
     </div>
-</nav>
 
     <!-- Asistente Chibi flotante -->
     <div class="chibi-assistant" id="chibiAssistant">
@@ -66,11 +545,12 @@
     </div>
 
     <div class="container">
-    <h1>
-    <span class="title-line-1">Jujutsu Kaisen</span>
-    <span class="title-line-2">Cursed Era II</span>
-    <span class="subtitle-inline">呪術廻戦</span>
-</h1>
+        <h1>
+            <span class="title-line-1">Jujutsu Kaisen</span>
+            <span class="title-line-2">Cursed Era II</span>
+            <span class="subtitle-inline">呪術廻戦</span>
+        </h1>
+        
         <!-- Imagen hero -->
         <div class="hero-image">
             <img src="https://cdn.discordapp.com/attachments/1436664023532703755/1468344484222865560/image.png?ex=6983addd&is=69825c5d&hm=256889ad993caae48108976ed0407ad2e02c6cb7911bc999add8c700701a0037&" alt="Jujutsu Kaisen">
@@ -89,299 +569,258 @@
         </div>
     </div>
 
-    <!-- Modal para secciones en desarrollo -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <span class="close-btn" id="closeBtn">&times;</span>
-            <h2 id="modalTitle">Sección en Desarrollo</h2>
-            <div class="dev-icon">⚠️</div>
-            <p id="modalText">Esta sección está actualmente en desarrollo. ¡Vuelve pronto!</p>
-            <button class="modal-button" id="modalCloseButton">Entendido</button>
-        </div>
-    </div>
-
-    <!-- Modal especial para Quejas -->
-    <div class="modal" id="quejasModal">
-        <div class="modal-content quejas-modal">
-            <span class="close-btn" id="quejasCloseBtn">&times;</span>
-            <h2>📧 Enviar Queja Privada</h2>
-            <div class="dev-icon">📬</div>
-            <p>Para quejas privadas que no se pueden hablar en el servidor, envía un correo a:</p>
-            <div class="email-box">
-                <span id="emailText">cursed.era2@gmail.com</span>
-                <button class="copy-btn" id="copyEmailBtn">📋 Copiar</button>
-            </div>
-            <p class="email-hint">Haz clic en "Abrir Gmail" para enviar tu queja directamente</p>
-            <div class="button-group">
-                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=cursed.era2@gmail.com&su=Queja%20Privada%20-%20Cursed%20Era%20II&body=Hola,%0A%0AQuiero%20reportar%20la%20siguiente%20queja:%0A%0A[Escribe%20tu%20queja%20aquí]%0A%0AGracias." 
-                   target="_blank" 
-                   class="modal-button gmail-btn">
-                    📨 Abrir Gmail
-                </a>
-                <button class="modal-button secondary-btn" id="quejasModalCloseBtn">Cerrar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Juego de Energía Maldita -->
-    <div class="modal" id="energyGameModal">
-        <div class="modal-content energy-game-modal">
-            <span class="close-btn" id="energyGameCloseBtn">&times;</span>
-            <h2>⚡ Generador de Energía Maldita</h2>
-            <div class="energy-game-container">
-                <div class="energy-display">
-                    <div class="energy-counter" id="energyCounter">0</div>
-                    <div class="energy-label">Unidades de Energía Maldita</div>
-                </div>
-                <button class="energy-btn" id="generateEnergyBtn">
-                    <span class="energy-icon">💥</span>
-                    <span>Generar Energía</span>
-                </button>
-                <div class="energy-stats">
-                    <div class="stat-item">
-                        <span class="stat-label">Total Generado:</span>
-                        <span class="stat-value" id="totalEnergy">0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Mejor Racha:</span>
-                        <span class="stat-value" id="bestStreak">0</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Nivel:</span>
-                        <span class="stat-value" id="energyLevel">Grado 4</span>
-                    </div>
-                </div>
-                <button class="modal-button secondary-btn" id="resetEnergyBtn">Resetear</button>
-            </div>
-            <div class="energy-particles" id="energyParticles"></div>
-        </div>
-    </div>
-
-    <!-- Modal de Estadísticas del Servidor -->
-    <div class="modal" id="statsModal">
-        <div class="modal-content stats-modal">
-            <span class="close-btn" id="statsCloseBtn">&times;</span>
-            <h2>📊 Estadísticas del Servidor</h2>
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-number" id="memberCount">---</div>
-                    <div class="stat-title">Miembros Totales</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🟢</div>
-                    <div class="stat-number" id="onlineCount">---</div>
-                    <div class="stat-title">Miembros Online</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">⚔️</div>
-                    <div class="stat-number">Active</div>
-                    <div class="stat-title">Estado del Servidor</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🎭</div>
-                    <div class="stat-number">100+</div>
-                    <div class="stat-title">Roleplayers</div>
-                </div>
-            </div>
-            <p class="stats-note">💡 Las estadísticas se actualizan en tiempo real desde Discord</p>
-            <button class="modal-button" id="joinDiscordBtn">
-                <a href="https://discord.gg/NfrSQ922Hs" target="_blank" style="color: white; text-decoration: none;">
-                    Unirse al Servidor
-                </a>
-            </button>
-        </div>
-    </div>
-
-    <!-- Modal de Secretos/Easter Eggs -->
-    <div class="modal" id="secretsModal">
-        <div class="modal-content secrets-modal">
-            <span class="close-btn" id="secretsCloseBtn">&times;</span>
-            <h2>🔮 Secretos Descubiertos</h2>
-            <div class="secrets-container">
-                <p class="secrets-intro">Explora el sitio para descubrir los secretos ocultos...</p>
-                
-                <!-- Input para móviles -->
-                <div class="mobile-secret-input" id="mobileSecretInput">
-                    <div class="secret-input-field">
-                        <input type="text" 
-                               id="secretCodeInput" 
-                               placeholder="Escribe el código secreto..." 
-                               autocomplete="off"
-                               autocorrect="off"
-                               autocapitalize="off"
-                               spellcheck="false">
-                        <button class="submit-secret-btn" id="submitSecretBtn">🔓 Desbloquear</button>
-                    </div>
-                    <div class="secret-hint">💡 Pista: Intenta con nombres de personajes o conceptos de Jujutsu Kaisen</div>
-                </div>
-
-                <div class="discovered-secrets-grid">
-                    <div class="secret-card" id="secretCard1">
-                        <div class="secret-lock">🔒</div>
-                        <div class="secret-name">???</div>
-                    </div>
-                    
-                    <div class="secret-card" id="secretCard2">
-                        <div class="secret-lock">🔒</div>
-                        <div class="secret-name">???</div>
-                    </div>
-                    
-                    <div class="secret-card" id="secretCard3">
-                        <div class="secret-lock">🔒</div>
-                        <div class="secret-name">???</div>
-                    </div>
-                    
-                    <div class="secret-card" id="secretCard4">
-                        <div class="secret-lock">🔒</div>
-                        <div class="secret-name">???</div>
-                    </div>
-                    
-                    <div class="secret-card" id="secretCard5">
-                        <div class="secret-lock">🔒</div>
-                        <div class="secret-name">???</div>
-                    </div>
-                </div>
-
-                <div class="secrets-progress">
-                    <div class="progress-label">Secretos Descubiertos</div>
-                    <div class="progress-bar-container">
-                        <div class="progress-bar-fill" id="secretsProgress" style="width: 0%"></div>
-                    </div>
-                    <div class="progress-text" id="secretsText">0 / 5</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Overlay de Easter Eggs -->
-    <div class="easter-egg-overlay" id="easterEggOverlay"></div>
-
+    <!-- Incluir tus otros modales aquí -->
+    
     <script src="script.js"></script>
-    <style>
-        /* ========== INPUT DE SECRETOS PARA MÓVILES ========== */
-        .mobile-secret-input {
-            display: none;
-            margin: 30px 0;
-            padding: 25px;
-            background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(255, 0, 102, 0.2));
-            border: 2px solid #8a2be2;
-            border-radius: 15px;
-        }
+    <script>
+        // ========== CHAT FLOTANTE IA - VERSIÓN DEFINITIVA ========== 
+        const floatingChat = document.getElementById('floatingChat');
+        const floatingChatMessages = document.getElementById('floatingChatMessages');
+        const floatingInput = document.getElementById('floatingInput');
+        const floatingSendBtn = document.getElementById('floatingSendBtn');
+        const closeChatBtn = document.getElementById('closeChatBtn');
+        
+        let floatingConversation = [];
+        let isFloatingProcessing = false;
 
-        body.mobile-mode .mobile-secret-input {
-            display: block;
-        }
+        const floatingSystemPrompt = `Eres un asistente IA experto en Jujutsu Kaisen y el servidor de roleplay "Jujutsu Kaisen Cursed Era II".
 
-        .secret-input-field {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
+INFORMACIÓN DEL SERVIDOR:
+- Jujutsu Kaisen Cursed Era II es un servidor de roleplay basado en Cursed Era y Sorcerers Heaven
+- Sistema equilibrado de stats y narrativa coherente
+- Servidor de Minecraft en desarrollo
+- Discord: https://discord.gg/NfrSQ922Hs
+- Email para quejas privadas: cursed.era2@gmail.com
 
-        #secretCodeInput {
-            flex: 1;
-            min-width: 200px;
-            padding: 15px 20px;
-            font-size: 1.1rem;
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid #8a2be2;
-            border-radius: 10px;
-            color: #fff;
-            font-weight: bold;
-            outline: none;
-            transition: all 0.3s ease;
-        }
+PERSONALIDAD Y ESTILO:
+- Eres amigable, entusiasta y muy conocedor del universo de Jujutsu Kaisen
+- Usas emojis de forma natural (⚡💀🔮⚔️👹♾️)
+- Eres conciso: máximo 3-4 párrafos por respuesta
+- Te adaptas al tono del usuario (formal/casual)
+- Si no sabes algo específico, lo admites honestamente
 
-        #secretCodeInput:focus {
-            border-color: #00ffff;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-        }
+CONOCIMIENTOS:
+- Personajes principales y secundarios de JJK
+- Técnicas malditas, energía maldita, técnicas innatas
+- Expansiones de dominio y sus mecánicas
+- Sistema de rangos (Grado 4 a Especial)
+- Clanes principales (Gojo, Zenin, Kamo)
+- Historia del manga/anime actualizada
+- Reglas y funcionamiento del servidor Cursed Era II
 
-        #secretCodeInput::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
+Responde siempre en español de forma clara, directa y útil.`;
 
-        .submit-secret-btn {
-            padding: 15px 30px;
-            background: linear-gradient(45deg, #ff0066, #8a2be2);
-            border: none;
-            border-radius: 10px;
-            color: #fff;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
-        }
+        // Abrir chat al clickear el chibi
+        chibiIcon.addEventListener('click', function() {
+            floatingChat.classList.add('active');
+            setTimeout(() => {
+                floatingInput.focus();
+            }, 400);
+        });
 
-        .submit-secret-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.6);
-        }
+        // Cerrar chat
+        closeChatBtn.addEventListener('click', function() {
+            floatingChat.classList.remove('active');
+        });
 
-        .submit-secret-btn:active {
-            transform: scale(0.95);
-        }
-
-        .secret-hint {
-            color: #00ffff;
-            font-size: 0.9rem;
-            text-align: center;
-            font-style: italic;
-        }
-
-        /* Animación de sacudida para error */
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        .shake-animation {
-            animation: shake 0.5s ease;
-        }
-
-        /* Notificación de secreto */
-        .secret-notification {
-            position: fixed;
-            top: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(45deg, #00ff00, #00cc00);
-            color: #fff;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            z-index: 10001;
-            box-shadow: 0 10px 40px rgba(0, 255, 0, 0.6);
-            animation: slideDown 0.5s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-20px);
+        // Enviar mensaje
+        async function sendFloatingMessage() {
+            const message = floatingInput.value.trim();
+            
+            if (!message || isFloatingProcessing) return;
+            
+            // Agregar mensaje del usuario
+            addFloatingMessage(message, 'user');
+            floatingInput.value = '';
+            
+            // Mostrar indicador de escritura
+            showFloatingTyping();
+            isFloatingProcessing = true;
+            floatingSendBtn.disabled = true;
+            
+            try {
+                // Agregar al historial
+                floatingConversation.push({
+                    role: 'user',
+                    content: message
+                });
+                
+                // Llamar a la API de Claude
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'anthropic-version': '2023-06-01'
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 1024,
+                        system: floatingSystemPrompt,
+                        messages: floatingConversation
+                    })
+                });
+                
+                // Verificar respuesta
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    console.error('Error de API:', response.status, errorData);
+                    throw new Error(`Error ${response.status}: ${errorData.error?.message || 'Error de conexión'}`);
+                }
+                
+                const data = await response.json();
+                
+                // Extraer respuesta de la IA
+                const aiResponse = data.content
+                    .filter(block => block.type === 'text')
+                    .map(block => block.text)
+                    .join('\n\n');
+                
+                if (!aiResponse) {
+                    throw new Error('No se recibió respuesta de la IA');
+                }
+                
+                // Agregar respuesta al historial
+                floatingConversation.push({
+                    role: 'assistant',
+                    content: aiResponse
+                });
+                
+                // Mostrar respuesta
+                hideFloatingTyping();
+                addFloatingMessage(aiResponse, 'ai');
+                
+            } catch (error) {
+                console.error('Error completo:', error);
+                hideFloatingTyping();
+                
+                // Mensaje de error más detallado
+                let errorMsg = 'Lo siento, hubo un problema al conectar con el servidor. ';
+                
+                if (error.message.includes('Failed to fetch')) {
+                    errorMsg += 'Verifica tu conexión a internet e intenta de nuevo.';
+                } else if (error.message.includes('429')) {
+                    errorMsg += 'Se han hecho demasiadas peticiones. Espera un momento e intenta de nuevo.';
+                } else if (error.message.includes('401')) {
+                    errorMsg += 'Error de autenticación. Recarga la página.';
+                } else {
+                    errorMsg += 'Por favor intenta de nuevo en unos segundos.';
+                }
+                
+                addFloatingMessage(errorMsg, 'error');
+                
+                // Remover último mensaje del historial si hubo error
+                if (floatingConversation.length > 0 && 
+                    floatingConversation[floatingConversation.length - 1].role === 'user') {
+                    floatingConversation.pop();
+                }
+            } finally {
+                isFloatingProcessing = false;
+                floatingSendBtn.disabled = false;
+                floatingInput.focus();
             }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
+        }
+
+        // Agregar mensaje al chat
+        function addFloatingMessage(text, sender) {
+            const welcome = floatingChatMessages.querySelector('.floating-welcome');
+            if (welcome) {
+                welcome.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => welcome.remove(), 300);
+            }
+            
+            const messageDiv = document.createElement('div');
+            
+            if (sender === 'error') {
+                messageDiv.className = 'error-message-floating';
+                messageDiv.innerHTML = `⚠️ ${text}`;
+            } else {
+                messageDiv.className = `floating-message ${sender}`;
+                
+                const avatar = document.createElement('div');
+                avatar.className = 'floating-message-avatar';
+                avatar.textContent = sender === 'user' ? '👤' : '🤖';
+                
+                const content = document.createElement('div');
+                content.className = 'floating-message-content';
+                
+                // Formatear texto (negritas, saltos de línea, etc)
+                let formattedText = text
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\n/g, '<br>');
+                
+                content.innerHTML = `
+                    <div>${formattedText}</div>
+                    <div class="floating-message-time">${getCurrentTime()}</div>
+                `;
+                
+                messageDiv.appendChild(avatar);
+                messageDiv.appendChild(content);
+            }
+            
+            floatingChatMessages.appendChild(messageDiv);
+            
+            // Scroll suave al final
+            floatingChatMessages.scrollTo({
+                top: floatingChatMessages.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
+        // Mostrar indicador de escritura
+        function showFloatingTyping() {
+            const typing = document.createElement('div');
+            typing.className = 'floating-message ai';
+            typing.id = 'floatingTyping';
+            typing.innerHTML = `
+                <div class="floating-message-avatar">🤖</div>
+                <div class="floating-message-content">
+                    <div class="floating-typing">
+                        <div class="floating-typing-dot"></div>
+                        <div class="floating-typing-dot"></div>
+                        <div class="floating-typing-dot"></div>
+                    </div>
+                </div>
+            `;
+            floatingChatMessages.appendChild(typing);
+            floatingChatMessages.scrollTop = floatingChatMessages.scrollHeight;
+        }
+
+        // Ocultar indicador de escritura
+        function hideFloatingTyping() {
+            const typing = document.getElementById('floatingTyping');
+            if (typing) {
+                typing.style.animation = 'fadeOut 0.2s ease';
+                setTimeout(() => typing.remove(), 200);
             }
         }
 
-        /* Responsive para el input */
-        @media (max-width: 768px) {
-            .secret-input-field {
-                flex-direction: column;
-            }
-
-            #secretCodeInput,
-            .submit-secret-btn {
-                width: 100%;
-            }
+        // Obtener hora actual
+        function getCurrentTime() {
+            return new Date().toLocaleTimeString('es-ES', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
         }
-    </style>
+
+        // Enviar sugerencia
+        function sendFloatingSuggestion(text) {
+            floatingInput.value = text;
+            sendFloatingMessage();
+        }
+
+        // Enter para enviar
+        floatingInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !isFloatingProcessing) {
+                sendFloatingMessage();
+            }
+        });
+
+        // Cerrar con ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && floatingChat.classList.contains('active')) {
+                floatingChat.classList.remove('active');
+            }
+        });
+    </script>
 </body>
 </html>
