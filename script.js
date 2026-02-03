@@ -19,6 +19,42 @@ for (let i = 0; i < particleCount; i++) {
     particlesContainer.appendChild(particle);
 }
 
+// Modal de selección de dispositivo
+const deviceModal = document.getElementById('deviceModal');
+const pcBtn = document.getElementById('pcBtn');
+const mobileBtn = document.getElementById('mobileBtn');
+
+// Verificar si ya se seleccionó antes
+const devicePreference = localStorage.getItem('devicePreference');
+
+if (devicePreference) {
+    deviceModal.classList.add('hidden');
+    document.body.classList.add(devicePreference);
+} else {
+    // Mostrar modal
+    deviceModal.style.display = 'flex';
+}
+
+// Selección PC
+pcBtn.addEventListener('click', function() {
+    localStorage.setItem('devicePreference', 'pc-mode');
+    document.body.classList.add('pc-mode');
+    deviceModal.classList.add('hidden');
+    setTimeout(() => {
+        deviceModal.style.display = 'none';
+    }, 300);
+});
+
+// Selección Mobile
+mobileBtn.addEventListener('click', function() {
+    localStorage.setItem('devicePreference', 'mobile-mode');
+    document.body.classList.add('mobile-mode');
+    deviceModal.classList.add('hidden');
+    setTimeout(() => {
+        deviceModal.style.display = 'none';
+    }, 300);
+});
+
 // Modal de secciones en desarrollo
 const modal = document.getElementById('modal');
 const closeBtn = document.getElementById('closeBtn');
@@ -63,22 +99,17 @@ function showRandomMessage() {
     }, 4000);
 }
 
-// Mostrar mensaje inicial después de 2 segundos
-setTimeout(showRandomMessage, 2000);
-
-// Mostrar mensaje aleatorio cada 15 segundos
-setInterval(showRandomMessage, 15000);
+// Mostrar mensaje inicial después de 2 segundos (solo si ya seleccionó dispositivo)
+if (devicePreference) {
+    setTimeout(showRandomMessage, 2000);
+    setInterval(showRandomMessage, 15000);
+}
 
 // Click en el chibi - redirigir al chat IA
 chibiIcon.addEventListener('click', function() {
-    // Aquí pon el link de tu chat IA cuando lo tengas
-    // Por ahora mostramos un modal
     modalTitle.textContent = 'Cursed IA';
     modalText.textContent = '¡La inteligencia artificial maldita está en desarrollo! Pronto podrás chatear con nuestro asistente AI especializado en Jujutsu Kaisen. ¡Mantente atento!';
     modal.style.display = 'block';
-    
-    // Cuando tengas el link del chat, descomenta esto y pon tu URL:
-    // window.open('TU_LINK_DEL_CHAT_IA', '_blank');
 });
 
 // Mensajes personalizados para cada sección
@@ -86,10 +117,6 @@ const sectionMessages = {
     'sugerencias': {
         title: 'Sugerencias',
         text: '¡Pronto podrás enviarnos tus sugerencias! Esta sección está en desarrollo. Estamos trabajando para que puedas compartir tus ideas y mejorar Cursed Era II.'
-    },
-    'servidor': {
-        title: 'Servidor',
-        text: '¡El servidor estará disponible muy pronto! Aquí podrás conectarte con otros jugadores y formar parte de la comunidad de Cursed Era II.'
     },
     'reclamar': {
         title: 'Reclamar',
@@ -110,18 +137,6 @@ document.querySelectorAll('.nav-link').forEach(link => {
             modal.style.display = 'block';
         }
     });
-});
-
-// También para el botón CTA
-document.querySelector('.cta-button')?.addEventListener('click', function(e) {
-    const section = this.getAttribute('data-section');
-    if (section) {
-        e.preventDefault();
-        const message = sectionMessages[section];
-        modalTitle.textContent = message.title;
-        modalText.textContent = message.text;
-        modal.style.display = 'block';
-    }
 });
 
 // Abrir modal de quejas

@@ -9,12 +9,30 @@
 <body>
     <div class="particles" id="particles"></div>
     
+    <!-- Modal de selección de dispositivo -->
+    <div class="device-modal" id="deviceModal">
+        <div class="device-modal-content">
+            <h2>Selecciona tu dispositivo</h2>
+            <p>Para optimizar tu experiencia, por favor selecciona:</p>
+            <div class="device-buttons">
+                <button class="device-btn pc-btn" id="pcBtn">
+                    <span class="device-icon">🖥️</span>
+                    <span>PC / Laptop</span>
+                </button>
+                <button class="device-btn mobile-btn" id="mobileBtn">
+                    <span class="device-icon">📱</span>
+                    <span>Celular / Tablet</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Menú de navegación -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="#" class="nav-link" data-section="sugerencias">Sugerencias</a>
             <a href="#" class="nav-link" id="quejasBtn">Quejas</a>
-            <a href="#" class="nav-link" data-section="servidor">Servidor</a>
+            <a href="https://discord.gg/NfrSQ922Hs" target="_blank" class="nav-link">Servidor</a>
             <a href="#" class="nav-link" data-section="reclamar">Reclamar</a>
         </div>
     </nav>
@@ -36,48 +54,19 @@
         
         <!-- Imagen hero -->
         <div class="hero-image">
-            <img src="https://i.pinimg.com/1200x/2e/a5/aa/2ea5aabc22c2d0861d29d2e38cbf646f.jpg" alt="Jujutsu Kaisen">
+            <img src="https://cdn.discordapp.com/attachments/1436664023532703755/1468344484222865560/image.png?ex=6983addd&is=69825c5d&hm=256889ad993caae48108976ed0407ad2e02c6cb7911bc999add8c700701a0037&" alt="Jujutsu Kaisen">
         </div>
 
         <!-- Descripción del servidor -->
-        <div class="server-description">
-            <div class="description-card">
-                <h2>🎭 Sobre el Servidor</h2>
-                <div class="description-content">
-                    <p>
-                        Bienvenido a <strong>Cursed Era II</strong>, un servidor de roleplay inmersivo basado en el universo de 
-                        <span class="highlight">Jujutsu Kaisen</span>. Sumérgete en un mundo donde las maldiciones acechan 
-                        en cada esquina y los hechiceros luchan por proteger a la humanidad.
-                    </p>
-                    <div class="features">
-                        <div class="feature-item">
-                            <span class="feature-icon">⚔️</span>
-                            <div>
-                                <h3>Jujutsu Kaisen: Cursed Era</h3>
-                                <p>Experimenta batallas épicas contra maldiciones, desarrolla tu técnica maldita única y forja tu camino como hechicero.</p>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">✨</span>
-                            <div>
-                                <h3>Jujutsu Kaisen: Sorcerers Heaven</h3>
-                                <p>Explora un paraíso de hechiceros donde las reglas se rompen y las posibilidades son infinitas. Crea alianzas, rivalidades y leyendas.</p>
-                            </div>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">🌟</span>
-                            <div>
-                                <h3>Comunidad Activa</h3>
-                                <p>Únete a una comunidad vibrante de fans de JJK. Participa en eventos, misiones exclusivas y storylines colaborativos.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cta-section">
-                        <p class="cta-text">¿Listo para despertar tu energía maldita?</p>
-                        <button class="cta-button" data-section="servidor">Únete al Servidor</button>
-                    </div>
-                </div>
-            </div>
+        <div class="welcome-section">
+            <h2 class="welcome-title">¡Bienvenido al servidor!</h2>
+            <p class="welcome-description">
+                Jujutsu Kaisen Cursed Era II es un servidor basado en Cursed Era y Sorcerers Heaven, 
+                contiene sistemas para priorizar las stats y narrativa de forma coherente, traemos con 
+                nosotros un servidor de Minecraft en desarrollo para generar en los users una forma de 
+                diversión ajena al roleplay, la administración nos esforzamos cada día en mejorar todo 
+                para causar una buena experiencia en los usuarios.
+            </p>
         </div>
     </div>
 
