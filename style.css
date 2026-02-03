@@ -184,31 +184,17 @@ body::before {
     width: 100%;
 }
 
-/* Optimización PC */
-body.pc-mode .container {
-    padding: 40px;
-}
-
-body.pc-mode h1 {
-    font-size: 10rem;
-}
-
-/* Optimización Mobile */
-body.mobile-mode .container {
-    padding: 15px;
-}
-
-body.mobile-mode h1 {
-    font-size: 3rem;
-}
-
+/* Título principal - CORREGIDO */
 h1 {
-    font-size: clamp(3rem, 12vw, 10rem);
+    font-size: 5rem;
     font-weight: 900;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     position: relative;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
     background: linear-gradient(
         45deg,
         #ff0066,
@@ -226,17 +212,134 @@ h1 {
             drop-shadow(0 0 60px rgba(0, 255, 255, 0.4));
 }
 
+/* Optimización PC - CORREGIDO */
+body.pc-mode .container {
+    padding: 40px;
+}
+
+body.pc-mode h1 {
+    font-size: 6rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+body.pc-mode .title-line-1,
+body.pc-mode .title-line-2 {
+    display: inline;
+}
+
+body.pc-mode .title-line-1::after {
+    content: ' ';
+}
+
+body.pc-mode .subtitle-inline {
+    width: 100%;
+    margin-top: 5px;
+}
+
+/* Optimización Mobile - CORREGIDO */
+body.mobile-mode .container {
+    padding: 15px;
+}
+
+body.mobile-mode h1 {
+    font-size: 3rem;
+}
+
+body.mobile-mode .title-line-1,
+body.mobile-mode .title-line-2,
+body.mobile-mode .subtitle-inline {
+    display: block;
+}
+
+/* Líneas del título */
+.title-line-1,
+.title-line-2 {
+    display: block;
+}
+
+/* Subtítulo japonés - CORREGIDO PARA QUE SEA VISIBLE */
+.subtitle-inline {
+    display: block;
+    font-size: 2rem;
+    color: #ff0066;
+    text-transform: none;
+    letter-spacing: 0.2em;
+    animation: flicker 3s linear infinite;
+    margin-top: 10px;
+    background: linear-gradient(
+        45deg,
+        #ff0066,
+        #8a2be2,
+        #00ffff,
+        #ff0066
+    );
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 15px rgba(255, 0, 102, 0.8));
+}
+
+/* Responsive automático */
+@media (min-width: 769px) {
+    h1 {
+        font-size: 5rem;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .title-line-1,
+    .title-line-2 {
+        display: inline;
+    }
+    
+    .title-line-1::after {
+        content: ' ';
+    }
+    
+    .subtitle-inline {
+        width: 100%;
+        margin-top: 5px;
+    }
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 3rem;
+    }
+    
+    .title-line-1,
+    .title-line-2,
+    .subtitle-inline {
+        display: block;
+    }
+    
+    .subtitle-inline {
+        font-size: 1.5rem;
+    }
+}
+
 @keyframes gradientShift {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
 h1::before {
-    content: 'Jujutsu Kaisen Cursed Era II';
+    content: '';
     position: absolute;
     left: 0;
     top: 0;
+    width: 100%;
+    height: 100%;
     z-index: -1;
     background: linear-gradient(
         45deg,
@@ -244,30 +347,13 @@ h1::before {
         rgba(138, 43, 226, 0.3),
         rgba(0, 255, 255, 0.3)
     );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
     filter: blur(10px);
     animation: glowPulse 2s ease-in-out infinite;
 }
 
 @keyframes glowPulse {
-    0%, 100% { opacity: 0.5; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.02); }
-}
-
-.subtitle {
-    font-size: clamp(1rem, 3vw, 2rem);
-    color: #ff0066;
-    margin-top: 30px;
-    text-transform: uppercase;
-    letter-spacing: 0.3em;
-    animation: flicker 3s linear infinite;
-}
-
-@keyframes flicker {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
 }
 
 .particles {

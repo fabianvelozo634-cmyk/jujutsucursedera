@@ -24,14 +24,15 @@ const deviceModal = document.getElementById('deviceModal');
 const pcBtn = document.getElementById('pcBtn');
 const mobileBtn = document.getElementById('mobileBtn');
 
-// Verificar si ya se seleccionó antes
+// Verificar si ya se seleccionó antes (CORREGIDO)
 const devicePreference = localStorage.getItem('devicePreference');
 
 if (devicePreference) {
-    deviceModal.classList.add('hidden');
+    // Ya tiene preferencia guardada, no mostrar modal
+    deviceModal.style.display = 'none';
     document.body.classList.add(devicePreference);
 } else {
-    // Mostrar modal
+    // Primera vez, mostrar modal
     deviceModal.style.display = 'flex';
 }
 
@@ -39,20 +40,14 @@ if (devicePreference) {
 pcBtn.addEventListener('click', function() {
     localStorage.setItem('devicePreference', 'pc-mode');
     document.body.classList.add('pc-mode');
-    deviceModal.classList.add('hidden');
-    setTimeout(() => {
-        deviceModal.style.display = 'none';
-    }, 300);
+    deviceModal.style.display = 'none';
 });
 
 // Selección Mobile
 mobileBtn.addEventListener('click', function() {
     localStorage.setItem('devicePreference', 'mobile-mode');
     document.body.classList.add('mobile-mode');
-    deviceModal.classList.add('hidden');
-    setTimeout(() => {
-        deviceModal.style.display = 'none';
-    }, 300);
+    deviceModal.style.display = 'none';
 });
 
 // Modal de secciones en desarrollo
@@ -210,4 +205,13 @@ window.onclick = function(event) {
     if (event.target == quejasModal) {
         quejasModal.style.display = 'none';
     }
+}
+// Botón para resetear preferencia de dispositivo (opcional)
+const resetDeviceBtn = document.getElementById('resetDevice');
+if (resetDeviceBtn) {
+    resetDeviceBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        localStorage.removeItem('devicePreference');
+        location.reload();
+    });
 }
