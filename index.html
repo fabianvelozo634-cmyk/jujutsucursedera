@@ -7,6 +7,19 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Pantalla de carga -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <img src="https://cdn.discordapp.com/attachments/1465647525766631585/1468370793045164177/jujutsu-kaisen-characters.gif?ex=6983c65e&is=698274de&hm=97a9bab60602acf4ff8a3d2070bc3b5cbf04304ed2ab283616cdfcc80b1f4373&" 
+                 alt="Loading..." 
+                 class="loading-gif">
+            <div class="loading-text">Cargando...</div>
+            <div class="loading-bar">
+                <div class="loading-progress" id="loadingProgress"></div>
+            </div>
+        </div>
+    </div>
+
     <div class="particles" id="particles"></div>
     
     <!-- Modal de selección de dispositivo -->
@@ -34,6 +47,9 @@
         <a href="#" class="nav-link" id="quejasBtn">Quejas</a>
         <a href="https://discord.gg/NfrSQ922Hs" target="_blank" class="nav-link">Servidor</a>
         <a href="#" class="nav-link" data-section="reclamar">Reclamar</a>
+        <a href="#" class="nav-link" id="energyGameBtn">⚡ Energía</a>
+        <a href="#" class="nav-link" id="statsBtn">📊 Stats</a>
+        <a href="#" class="nav-link" id="secretsBtn">🔮 Secretos</a>
         <a href="#" class="nav-link" id="resetDevice">⚙️</a>
     </div>
 </nav>
@@ -106,6 +122,125 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de Juego de Energía Maldita -->
+    <div class="modal" id="energyGameModal">
+        <div class="modal-content energy-game-modal">
+            <span class="close-btn" id="energyGameCloseBtn">&times;</span>
+            <h2>⚡ Generador de Energía Maldita</h2>
+            <div class="energy-game-container">
+                <div class="energy-display">
+                    <div class="energy-counter" id="energyCounter">0</div>
+                    <div class="energy-label">Unidades de Energía Maldita</div>
+                </div>
+                <button class="energy-btn" id="generateEnergyBtn">
+                    <span class="energy-icon">💥</span>
+                    <span>Generar Energía</span>
+                </button>
+                <div class="energy-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Total Generado:</span>
+                        <span class="stat-value" id="totalEnergy">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Mejor Racha:</span>
+                        <span class="stat-value" id="bestStreak">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Nivel:</span>
+                        <span class="stat-value" id="energyLevel">Grado 4</span>
+                    </div>
+                </div>
+                <button class="modal-button secondary-btn" id="resetEnergyBtn">Resetear</button>
+            </div>
+            <div class="energy-particles" id="energyParticles"></div>
+        </div>
+    </div>
+
+    <!-- Modal de Estadísticas del Servidor -->
+    <div class="modal" id="statsModal">
+        <div class="modal-content stats-modal">
+            <span class="close-btn" id="statsCloseBtn">&times;</span>
+            <h2>📊 Estadísticas del Servidor</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number" id="memberCount">---</div>
+                    <div class="stat-title">Miembros Totales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🟢</div>
+                    <div class="stat-number" id="onlineCount">---</div>
+                    <div class="stat-title">Miembros Online</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚔️</div>
+                    <div class="stat-number">Active</div>
+                    <div class="stat-title">Estado del Servidor</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎭</div>
+                    <div class="stat-number">100+</div>
+                    <div class="stat-title">Roleplayers</div>
+                </div>
+            </div>
+            <p class="stats-note">💡 Las estadísticas se actualizan en tiempo real desde Discord</p>
+            <button class="modal-button" id="joinDiscordBtn">
+                <a href="https://discord.gg/NfrSQ922Hs" target="_blank" style="color: white; text-decoration: none;">
+                    Unirse al Servidor
+                </a>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de Secretos/Easter Eggs -->
+    <div class="modal" id="secretsModal">
+        <div class="modal-content secrets-modal">
+            <span class="close-btn" id="secretsCloseBtn">&times;</span>
+            <h2>🔮 Secretos Descubiertos</h2>
+            <div class="secrets-container">
+                <p class="secrets-intro">Explora el sitio para descubrir los secretos ocultos...</p>
+                
+                <div class="discovered-secrets-grid">
+                    <div class="secret-card" id="secretCard1">
+                        <div class="secret-lock">🔒</div>
+                        <div class="secret-name">???</div>
+                    </div>
+                    
+                    <div class="secret-card" id="secretCard2">
+                        <div class="secret-lock">🔒</div>
+                        <div class="secret-name">???</div>
+                    </div>
+                    
+                    <div class="secret-card" id="secretCard3">
+                        <div class="secret-lock">🔒</div>
+                        <div class="secret-name">???</div>
+                    </div>
+                    
+                    <div class="secret-card" id="secretCard4">
+                        <div class="secret-lock">🔒</div>
+                        <div class="secret-name">???</div>
+                    </div>
+                    
+                    <div class="secret-card" id="secretCard5">
+                        <div class="secret-lock">🔒</div>
+                        <div class="secret-name">???</div>
+                    </div>
+                </div>
+
+                <div class="secrets-progress">
+                    <div class="progress-label">Secretos Descubiertos</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="secretsProgress" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-text" id="secretsText">0 / 5</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay de Easter Eggs -->
+    <div class="easter-egg-overlay" id="easterEggOverlay"></div>
 
     <script src="script.js"></script>
 </body>
