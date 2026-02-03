@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jujutsu Kaisen Cursed Era II</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <!-- Menú de navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-link" data-section="sugerencias">Sugerencias</a>
+            <a href="#" class="nav-link" id="quejasBtn">Quejas</a>
+            <a href="#" class="nav-link" data-section="servidor">Servidor</a>
+            <a href="#" class="nav-link" data-section="cursed-ia">Cursed IA</a>
+            <a href="#" class="nav-link" data-section="reclamar">Reclamar</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Jujutsu Kaisen<br>Cursed Era II</h1>
+        <div class="subtitle">呪術廻戦</div>
+        
+        <!-- Imagen agregada aquí -->
+        <div class="hero-image">
+            <img src="https://i.pinimg.com/1200x/2e/a5/aa/2ea5aabc22c2d0861d29d2e38cbf646f.jpg" alt="Jujutsu Kaisen">
+        </div>
+    </div>
+
+    <!-- Modal para secciones en desarrollo -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeBtn">&times;</span>
+            <h2 id="modalTitle">Sección en Desarrollo</h2>
+            <div class="dev-icon">⚠️</div>
+            <p id="modalText">Esta sección está actualmente en desarrollo. ¡Vuelve pronto!</p>
+            <button class="modal-button" id="modalCloseButton">Entendido</button>
+        </div>
+    </div>
+
+    <!-- Modal especial para Quejas -->
+    <div class="modal" id="quejasModal">
+        <div class="modal-content quejas-modal">
+            <span class="close-btn" id="quejasCloseBtn">&times;</span>
+            <h2>📧 Enviar Queja Privada</h2>
+            <div class="dev-icon">📬</div>
+            <p>Para quejas privadas que no se pueden hablar en el servidor, envía un correo a:</p>
+            <div class="email-box">
+                <span id="emailText">cursed.era2@gmail.com</span>
+                <button class="copy-btn" id="copyEmailBtn">📋 Copiar</button>
+            </div>
+            <p class="email-hint">Haz clic en "Abrir Gmail" para enviar tu queja directamente</p>
+            <div class="button-group">
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=cursed.era2@gmail.com&su=Queja%20Privada%20-%20Cursed%20Era%20II&body=Hola,%0A%0AQuiero%20reportar%20la%20siguiente%20queja:%0A%0A[Escribe%20tu%20queja%20aquí]%0A%0AGracias." 
+                   target="_blank" 
+                   class="modal-button gmail-btn">
+                    📨 Abrir Gmail
+                </a>
+                <button class="modal-button secondary-btn" id="quejasModalCloseBtn">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
