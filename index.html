@@ -201,6 +201,21 @@
             <div class="secrets-container">
                 <p class="secrets-intro">Explora el sitio para descubrir los secretos ocultos...</p>
                 
+                <!-- Input para móviles -->
+                <div class="mobile-secret-input" id="mobileSecretInput">
+                    <div class="secret-input-field">
+                        <input type="text" 
+                               id="secretCodeInput" 
+                               placeholder="Escribe el código secreto..." 
+                               autocomplete="off"
+                               autocorrect="off"
+                               autocapitalize="off"
+                               spellcheck="false">
+                        <button class="submit-secret-btn" id="submitSecretBtn">🔓 Desbloquear</button>
+                    </div>
+                    <div class="secret-hint">💡 Pista: Intenta con nombres de personajes o conceptos de Jujutsu Kaisen</div>
+                </div>
+
                 <div class="discovered-secrets-grid">
                     <div class="secret-card" id="secretCard1">
                         <div class="secret-lock">🔒</div>
@@ -243,5 +258,130 @@
     <div class="easter-egg-overlay" id="easterEggOverlay"></div>
 
     <script src="script.js"></script>
+    <style>
+        /* ========== INPUT DE SECRETOS PARA MÓVILES ========== */
+        .mobile-secret-input {
+            display: none;
+            margin: 30px 0;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(255, 0, 102, 0.2));
+            border: 2px solid #8a2be2;
+            border-radius: 15px;
+        }
+
+        body.mobile-mode .mobile-secret-input {
+            display: block;
+        }
+
+        .secret-input-field {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        #secretCodeInput {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #8a2be2;
+            border-radius: 10px;
+            color: #fff;
+            font-weight: bold;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        #secretCodeInput:focus {
+            border-color: #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        #secretCodeInput::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .submit-secret-btn {
+            padding: 15px 30px;
+            background: linear-gradient(45deg, #ff0066, #8a2be2);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .submit-secret-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.6);
+        }
+
+        .submit-secret-btn:active {
+            transform: scale(0.95);
+        }
+
+        .secret-hint {
+            color: #00ffff;
+            font-size: 0.9rem;
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* Animación de sacudida para error */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .shake-animation {
+            animation: shake 0.5s ease;
+        }
+
+        /* Notificación de secreto */
+        .secret-notification {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(45deg, #00ff00, #00cc00);
+            color: #fff;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            z-index: 10001;
+            box-shadow: 0 10px 40px rgba(0, 255, 0, 0.6);
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* Responsive para el input */
+        @media (max-width: 768px) {
+            .secret-input-field {
+                flex-direction: column;
+            }
+
+            #secretCodeInput,
+            .submit-secret-btn {
+                width: 100%;
+            }
+        }
+    </style>
 </body>
 </html>

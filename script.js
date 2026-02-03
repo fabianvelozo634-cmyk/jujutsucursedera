@@ -117,6 +117,10 @@ const secretsBtn = document.getElementById('secretsBtn');
 const secretsCloseBtn = document.getElementById('secretsCloseBtn');
 const easterEggOverlay = document.getElementById('easterEggOverlay');
 
+// Input de secretos móvil
+const secretCodeInput = document.getElementById('secretCodeInput');
+const submitSecretBtn = document.getElementById('submitSecretBtn');
+
 // Variables del juego de energía
 let currentEnergy = 0;
 let totalEnergyGenerated = 0;
@@ -174,6 +178,143 @@ let discoveredSecrets = JSON.parse(localStorage.getItem('discoveredSecrets')) ||
     curse: false,
     era: false
 };
+
+// ========== FUNCIONALIDAD DE INPUT MÓVIL PARA SECRETOS ==========
+function checkSecretFromInput(inputValue) {
+    const normalizedInput = inputValue.toLowerCase().trim();
+    
+    // Verificar cada código secreto
+    for (const [key, code] of Object.entries(secretCodes)) {
+        const codeString = code.join('');
+        if (normalizedInput === codeString) {
+            if (!discoveredSecrets[key]) {
+                // Nuevo secreto descubierto
+                discoveredSecrets[key] = true;
+                saveDiscoveredSecrets();
+                
+                // Activar efecto visual
+                switch(key) {
+                    case 'sukuna':
+                        triggerSukunaEffect();
+                        break;
+                    case 'gojo':
+                        triggerGojoEffect();
+                        break;
+                    case 'domain':
+                        triggerDomainEffect();
+                        break;
+                    case 'curse':
+                        triggerCurseEffect();
+                        break;
+                    case 'era':
+                        triggerEraEffect();
+                        break;
+                }
+                
+                // Actualizar UI
+                updateSecretsUI();
+                
+                // Limpiar input
+                secretCodeInput.value = '';
+                
+                // Mostrar notificación de éxito
+                showSuccessNotification(`¡Secreto desbloqueado: ${secretNames[key]}! ${secretIcons[key]}`);
+                
+                return true;
+            } else {
+                // Secreto ya descubierto
+                showInfoNotification(`Ya descubriste este secreto: ${secretNames[key]} ${secretIcons[key]}`);
+                secretCodeInput.value = '';
+                return true;
+            }
+        }
+    }
+    
+    // Código incorrecto
+    return false;
+}
+
+// Event listener para el botón de submit
+if (submitSecretBtn) {
+    submitSecretBtn.addEventListener('click', function() {
+        const inputValue = secretCodeInput.value;
+        
+        if (!inputValue.trim()) {
+            showErrorNotification('Por favor, escribe un código secreto');
+            return;
+        }
+        
+        const found = checkSecretFromInput(inputValue);
+        
+        if (!found) {
+            showErrorNotification('Código incorrecto. ¡Sigue intentando!');
+            secretCodeInput.classList.add('shake-animation');
+            setTimeout(() => {
+                secretCodeInput.classList.remove('shake-animation');
+            }, 500);
+        }
+    });
+}
+
+// Event listener para Enter en el input
+if (secretCodeInput) {
+    secretCodeInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            submitSecretBtn.click();
+        }
+    });
+}
+
+// Función para mostrar notificación de éxito
+function showSuccessNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'secret-notification';
+    notification.style.background = 'linear-gradient(45deg, #00ff00, #00cc00)';
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'fadeOut 0.5s ease';
+        setTimeout(() => {
+            notification.remove();
+        }, 500);
+    }, 3000);
+}
+
+// Función para mostrar notificación de info
+function showInfoNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'secret-notification';
+    notification.style.background = 'linear-gradient(45deg, #00ffff, #0088ff)';
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'fadeOut 0.5s ease';
+        setTimeout(() => {
+            notification.remove();
+        }, 500);
+    }, 3000);
+}
+
+// Función para mostrar notificación de error
+function showErrorNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'secret-notification';
+    notification.style.background = 'linear-gradient(45deg, #ff0066, #cc0044)';
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'fadeOut 0.5s ease';
+        setTimeout(() => {
+            notification.remove();
+        }, 500);
+    }, 2500);
+}
 
 // Actualizar UI de secretos al cargar
 function updateSecretsUI() {
@@ -453,17 +594,20 @@ secretsBtn.addEventListener('click', function(e) {
     updateSecretsUI();
 });
 
-// Detectar secuencias de teclas
+// Detectar secuencias de teclas (solo para PC)
 document.addEventListener('keydown', function(e) {
-    keySequence.push(e.key.toLowerCase());
-    
-    // Mantener solo las últimas 10 teclas
-    if (keySequence.length > 10) {
-        keySequence.shift();
+    // Solo funciona en modo PC
+    if (!document.body.classList.contains('mobile-mode')) {
+        keySequence.push(e.key.toLowerCase());
+        
+        // Mantener solo las últimas 10 teclas
+        if (keySequence.length > 10) {
+            keySequence.shift();
+        }
+        
+        // Verificar códigos secretos
+        checkSecretCodes();
     }
-    
-    // Verificar códigos secretos
-    checkSecretCodes();
 });
 
 function checkSecretCodes() {
@@ -660,8 +804,6 @@ function showSecretNotification(message) {
 function saveDiscoveredSecrets() {
     localStorage.setItem('discoveredSecrets', JSON.stringify(discoveredSecrets));
 }
-
-// Abrir modal de quejas (mantener código anterior)
 
 // ========== COPIAR EMAIL ==========
 copyEmailBtn.addEventListener('click', function() {
