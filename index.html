@@ -478,6 +478,7 @@
             <a href="#" class="nav-link" id="energyGameBtn">⚡ Energía</a>
             <a href="#" class="nav-link" id="statsBtn">📊 Stats</a>
             <a href="#" class="nav-link" id="secretsBtn">🔮 Secretos</a>
+            <a href="#" class="nav-link" id="gamesBtn">🎮 Juegos</a>
             <a href="#" class="nav-link" id="resetDevice">⚙️</a>
         </div>
     </nav>
@@ -569,258 +570,219 @@
         </div>
     </div>
 
-    <!-- Incluir tus otros modales aquí -->
+    <!-- MODALES FALTANTES -->
     
-    <script src="script.js"></script>
-    <script>
-        // ========== CHAT FLOTANTE IA - VERSIÓN DEFINITIVA ========== 
-        const floatingChat = document.getElementById('floatingChat');
-        const floatingChatMessages = document.getElementById('floatingChatMessages');
-        const floatingInput = document.getElementById('floatingInput');
-        const floatingSendBtn = document.getElementById('floatingSendBtn');
-        const closeChatBtn = document.getElementById('closeChatBtn');
-        
-        let floatingConversation = [];
-        let isFloatingProcessing = false;
+    <!-- Modal General -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeBtn">&times;</span>
+            <div class="dev-icon">🚧</div>
+            <h2 id="modalTitle">Título</h2>
+            <p id="modalText">Texto del modal</p>
+            <button class="modal-button" id="modalCloseButton">Entendido</button>
+        </div>
+    </div>
 
-        const floatingSystemPrompt = `Eres un asistente IA experto en Jujutsu Kaisen y el servidor de roleplay "Jujutsu Kaisen Cursed Era II".
-
-INFORMACIÓN DEL SERVIDOR:
-- Jujutsu Kaisen Cursed Era II es un servidor de roleplay basado en Cursed Era y Sorcerers Heaven
-- Sistema equilibrado de stats y narrativa coherente
-- Servidor de Minecraft en desarrollo
-- Discord: https://discord.gg/NfrSQ922Hs
-- Email para quejas privadas: cursed.era2@gmail.com
-
-PERSONALIDAD Y ESTILO:
-- Eres amigable, entusiasta y muy conocedor del universo de Jujutsu Kaisen
-- Usas emojis de forma natural (⚡💀🔮⚔️👹♾️)
-- Eres conciso: máximo 3-4 párrafos por respuesta
-- Te adaptas al tono del usuario (formal/casual)
-- Si no sabes algo específico, lo admites honestamente
-
-CONOCIMIENTOS:
-- Personajes principales y secundarios de JJK
-- Técnicas malditas, energía maldita, técnicas innatas
-- Expansiones de dominio y sus mecánicas
-- Sistema de rangos (Grado 4 a Especial)
-- Clanes principales (Gojo, Zenin, Kamo)
-- Historia del manga/anime actualizada
-- Reglas y funcionamiento del servidor Cursed Era II
-
-Responde siempre en español de forma clara, directa y útil.`;
-
-        // Abrir chat al clickear el chibi
-        chibiIcon.addEventListener('click', function() {
-            floatingChat.classList.add('active');
-            setTimeout(() => {
-                floatingInput.focus();
-            }, 400);
-        });
-
-        // Cerrar chat
-        closeChatBtn.addEventListener('click', function() {
-            floatingChat.classList.remove('active');
-        });
-
-        // Enviar mensaje
-        async function sendFloatingMessage() {
-            const message = floatingInput.value.trim();
+    <!-- Modal de Quejas -->
+    <div id="quejasModal" class="modal">
+        <div class="modal-content quejas-modal">
+            <span class="close-btn" id="quejasCloseBtn">&times;</span>
+            <h2>📧 Contacto para Quejas</h2>
+            <p>Si tienes alguna queja o sugerencia importante, puedes contactarnos directamente:</p>
             
-            if (!message || isFloatingProcessing) return;
+            <div class="email-box">
+                <span id="emailText">cursed.era2@gmail.com</span>
+                <button class="copy-btn modal-button" id="copyEmailBtn">📋 Copiar</button>
+            </div>
             
-            // Agregar mensaje del usuario
-            addFloatingMessage(message, 'user');
-            floatingInput.value = '';
+            <p class="email-hint">También puedes escribir directamente a nuestro correo</p>
             
-            // Mostrar indicador de escritura
-            showFloatingTyping();
-            isFloatingProcessing = true;
-            floatingSendBtn.disabled = true;
-            
-            try {
-                // Agregar al historial
-                floatingConversation.push({
-                    role: 'user',
-                    content: message
-                });
-                
-                // Llamar a la API de Claude
-                const response = await fetch('https://api.anthropic.com/v1/messages', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'anthropic-version': '2023-06-01'
-                    },
-                    body: JSON.stringify({
-                        model: 'claude-sonnet-4-20250514',
-                        max_tokens: 1024,
-                        system: floatingSystemPrompt,
-                        messages: floatingConversation
-                    })
-                });
-                
-                // Verificar respuesta
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    console.error('Error de API:', response.status, errorData);
-                    throw new Error(`Error ${response.status}: ${errorData.error?.message || 'Error de conexión'}`);
-                }
-                
-                const data = await response.json();
-                
-                // Extraer respuesta de la IA
-                const aiResponse = data.content
-                    .filter(block => block.type === 'text')
-                    .map(block => block.text)
-                    .join('\n\n');
-                
-                if (!aiResponse) {
-                    throw new Error('No se recibió respuesta de la IA');
-                }
-                
-                // Agregar respuesta al historial
-                floatingConversation.push({
-                    role: 'assistant',
-                    content: aiResponse
-                });
-                
-                // Mostrar respuesta
-                hideFloatingTyping();
-                addFloatingMessage(aiResponse, 'ai');
-                
-            } catch (error) {
-                console.error('Error completo:', error);
-                hideFloatingTyping();
-                
-                // Mensaje de error más detallado
-                let errorMsg = 'Lo siento, hubo un problema al conectar con el servidor. ';
-                
-                if (error.message.includes('Failed to fetch')) {
-                    errorMsg += 'Verifica tu conexión a internet e intenta de nuevo.';
-                } else if (error.message.includes('429')) {
-                    errorMsg += 'Se han hecho demasiadas peticiones. Espera un momento e intenta de nuevo.';
-                } else if (error.message.includes('401')) {
-                    errorMsg += 'Error de autenticación. Recarga la página.';
-                } else {
-                    errorMsg += 'Por favor intenta de nuevo en unos segundos.';
-                }
-                
-                addFloatingMessage(errorMsg, 'error');
-                
-                // Remover último mensaje del historial si hubo error
-                if (floatingConversation.length > 0 && 
-                    floatingConversation[floatingConversation.length - 1].role === 'user') {
-                    floatingConversation.pop();
-                }
-            } finally {
-                isFloatingProcessing = false;
-                floatingSendBtn.disabled = false;
-                floatingInput.focus();
-            }
-        }
+            <div class="button-group">
+                <a href="mailto:cursed.era2@gmail.com" class="modal-button gmail-btn">
+                    Abrir Gmail
+                </a>
+                <button class="modal-button secondary-btn" id="quejasModalCloseBtn">Cerrar</button>
+            </div>
+        </div>
+    </div>
 
-        // Agregar mensaje al chat
-        function addFloatingMessage(text, sender) {
-            const welcome = floatingChatMessages.querySelector('.floating-welcome');
-            if (welcome) {
-                welcome.style.animation = 'fadeOut 0.3s ease';
-                setTimeout(() => welcome.remove(), 300);
-            }
+    <!-- Modal de Juego de Energía -->
+    <div id="energyGameModal" class="modal">
+        <div class="modal-content energy-game-modal">
+            <span class="close-btn" id="energyGameCloseBtn">&times;</span>
+            <h2>⚡ Generador de Energía Maldita ⚡</h2>
             
-            const messageDiv = document.createElement('div');
-            
-            if (sender === 'error') {
-                messageDiv.className = 'error-message-floating';
-                messageDiv.innerHTML = `⚠️ ${text}`;
-            } else {
-                messageDiv.className = `floating-message ${sender}`;
-                
-                const avatar = document.createElement('div');
-                avatar.className = 'floating-message-avatar';
-                avatar.textContent = sender === 'user' ? '👤' : '🤖';
-                
-                const content = document.createElement('div');
-                content.className = 'floating-message-content';
-                
-                // Formatear texto (negritas, saltos de línea, etc)
-                let formattedText = text
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/\n/g, '<br>');
-                
-                content.innerHTML = `
-                    <div>${formattedText}</div>
-                    <div class="floating-message-time">${getCurrentTime()}</div>
-                `;
-                
-                messageDiv.appendChild(avatar);
-                messageDiv.appendChild(content);
-            }
-            
-            floatingChatMessages.appendChild(messageDiv);
-            
-            // Scroll suave al final
-            floatingChatMessages.scrollTo({
-                top: floatingChatMessages.scrollHeight,
-                behavior: 'smooth'
-            });
-        }
+            <div class="energy-game-container">
+                <div class="energy-display">
+                    <div class="energy-counter" id="energyCounter">0</div>
+                    <div class="energy-label">Energía Actual</div>
+                </div>
 
-        // Mostrar indicador de escritura
-        function showFloatingTyping() {
-            const typing = document.createElement('div');
-            typing.className = 'floating-message ai';
-            typing.id = 'floatingTyping';
-            typing.innerHTML = `
-                <div class="floating-message-avatar">🤖</div>
-                <div class="floating-message-content">
-                    <div class="floating-typing">
-                        <div class="floating-typing-dot"></div>
-                        <div class="floating-typing-dot"></div>
-                        <div class="floating-typing-dot"></div>
+                <button class="energy-btn" id="generateEnergyBtn">
+                    <span class="energy-icon">💀</span>
+                    <span>¡Generar!</span>
+                </button>
+
+                <div class="energy-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Total Generado:</span>
+                        <span class="stat-value" id="totalEnergy">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Mejor Racha:</span>
+                        <span class="stat-value" id="bestStreak">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Nivel:</span>
+                        <span class="stat-value" id="energyLevel">Grado 4</span>
                     </div>
                 </div>
-            `;
-            floatingChatMessages.appendChild(typing);
-            floatingChatMessages.scrollTop = floatingChatMessages.scrollHeight;
-        }
 
-        // Ocultar indicador de escritura
-        function hideFloatingTyping() {
-            const typing = document.getElementById('floatingTyping');
-            if (typing) {
-                typing.style.animation = 'fadeOut 0.2s ease';
-                setTimeout(() => typing.remove(), 200);
-            }
-        }
+                <button class="modal-button secondary-btn" id="resetEnergyBtn">🔄 Resetear Stats</button>
+                
+                <div class="energy-particles" id="energyParticles"></div>
+            </div>
+        </div>
+    </div>
 
-        // Obtener hora actual
-        function getCurrentTime() {
-            return new Date().toLocaleTimeString('es-ES', { 
-                hour: '2-digit', 
-                minute: '2-digit' 
-            });
-        }
+    <!-- Modal de Estadísticas -->
+    <div id="statsModal" class="modal">
+        <div class="modal-content stats-modal">
+            <span class="close-btn" id="statsCloseBtn">&times;</span>
+            <h2>📊 Estadísticas del Servidor</h2>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number" id="memberCount">0</div>
+                    <div class="stat-title">Miembros Totales</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🟢</div>
+                    <div class="stat-number" id="onlineCount">0</div>
+                    <div class="stat-title">En Línea</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">🤖</div>
+                    <div class="stat-number">0</div>
+                    <div class="stat-title">Bots en Total</div>
+                </div>
+            </div>
+            
+            <p class="stats-note">Las estadísticas se actualizan en tiempo real desde Discord</p>
+        </div>
+    </div>
 
-        // Enviar sugerencia
-        function sendFloatingSuggestion(text) {
-            floatingInput.value = text;
-            sendFloatingMessage();
-        }
+    <!-- Modal de Secretos -->
+    <div id="secretsModal" class="modal">
+        <div class="modal-content secrets-modal">
+            <span class="close-btn" id="secretsCloseBtn">&times;</span>
+            <h2>🔮 Secretos Descubiertos</h2>
+            
+            <div class="secrets-container">
+                <p class="secrets-intro">
+                    Descubre secretos escribiendo códigos especiales en tu teclado (PC) o usando el campo de abajo (Móvil)
+                </p>
 
-        // Enter para enviar
-        floatingInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !isFloatingProcessing) {
+                <!-- Input para móvil -->
+                <div class="secret-input-container" style="margin: 20px 0;">
+                    <input 
+                        type="text" 
+                        id="secretCodeInput" 
+                        placeholder="Escribe un código secreto..."
+                        style="width: 70%; padding: 12px; border-radius: 10px; border: 2px solid #8a2be2; background: rgba(0,0,0,0.5); color: #fff; font-size: 1rem;"
+                    >
+                    <button 
+                        id="submitSecretBtn" 
+                        class="modal-button" 
+                        style="width: 25%; margin-left: 10px; padding: 12px;"
+                    >
+                        🔍 Verificar
+                    </button>
+                </div>
+
+                <div class="discovered-secrets-grid">
+                    <div class="secret-card" id="secretCard1">
+                        <div class="secret-lock">🔒</div>
+                        <div class="secret-icon">👹</div>
+                        <div class="secret-name">???</div>
+                    </div>
+                    
+                    <div class="secret-card" id="secretCard2">
+                        <div class="secret-lock">🔒</div>
+                        <div class="secret-icon">♾️</div>
+                        <div class="secret-name">???</div>
+                    </div>
+                    
+                    <div class="secret-card" id="secretCard3">
+                        <div class="secret-lock">🔒</div>
+                        <div class="secret-icon">🌀</div>
+                        <div class="secret-name">???</div>
+                    </div>
+                    
+                    <div class="secret-card" id="secretCard4">
+                        <div class="secret-lock">🔒</div>
+                        <div class="secret-icon">⚡</div>
+                        <div class="secret-name">???</div>
+                    </div>
+                    
+                    <div class="secret-card" id="secretCard5">
+                    <div class="secret-lock">🔒</div>
+                    <div class="secret-icon">💀</div>
+                    <div class="secret-name">???</div>
+                </div>
+                
+                <div class="secret-card" id="secretCard6">
+                    <div class="secret-lock">🔒</div>
+                    <div class="secret-icon">🌙</div>
+                    <div class="secret-name">???</div>
+                </div>
+            </div>
+
+                <div class="secrets-progress">
+                    <div class="progress-label">Progreso de Descubrimiento</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" id="secretsProgress" style="width: 0%;"></div>
+                    </div>
+                    <div class="progress-text" id="secretsText">0 / 5</div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <!-- Modal de Juegos -->
+    <div id="gamesModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span class="close-btn" id="gamesCloseBtn">&times;</span>
+            <h2>🎮 Juegos de Cursed Era</h2>
+            
+            <div id="gamesContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 30px;">
+                <!-- Los juegos se cargarán aquí dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay de Easter Eggs -->
+    <div class="easter-egg-overlay" id="easterEggOverlay"></div>
+    
+ <script src="script.js"></script>
+    <script src="chat_ai.js"></script>
+    <script src="games.js"></script>
+    <script>
+    // definición de emergencia
+    function sendFloatingSuggestion(text) {
+        const input = document.getElementById('floatingInput');
+        if (input) {
+            input.value = text;
+            // intenta llamar a la función real
+            if (typeof sendFloatingMessage === 'function') {
                 sendFloatingMessage();
+            } else {
+                console.error("sendFloatingMessage no está definida");
             }
-        });
-
-        // Cerrar con ESC
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && floatingChat.classList.contains('active')) {
-                floatingChat.classList.remove('active');
-            }
-        });
-    </script>
+        }
+    }
+</script>
 </body>
 </html>

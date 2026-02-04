@@ -4,7 +4,7 @@ const loadingProgress = document.getElementById('loadingProgress');
 const deviceModal = document.getElementById('deviceModal');
 
 // Verificar si ya se seleccionó dispositivo antes
-const devicePreference = localStorage.getItem('devicePreference');
+let devicePreference = localStorage.getItem('devicePreference');
 
 // Simular carga
 window.addEventListener('load', function() {
@@ -59,6 +59,7 @@ const mobileBtn = document.getElementById('mobileBtn');
 // Selección PC
 pcBtn.addEventListener('click', function() {
     localStorage.setItem('devicePreference', 'pc-mode');
+    document.body.classList.remove('mobile-mode');
     document.body.classList.add('pc-mode');
     deviceModal.classList.remove('show');
     
@@ -70,6 +71,7 @@ pcBtn.addEventListener('click', function() {
 // Selección Mobile
 mobileBtn.addEventListener('click', function() {
     localStorage.setItem('devicePreference', 'mobile-mode');
+    document.body.classList.remove('pc-mode');
     document.body.classList.add('mobile-mode');
     deviceModal.classList.remove('show');
     
@@ -143,7 +145,8 @@ const secretCodes = {
     gojo: ['g', 'o', 'j', 'o'],
     domain: ['d', 'o', 'm', 'a', 'i', 'n'],
     curse: ['c', 'u', 'r', 's', 'e'],
-    era: ['e', 'r', 'a']
+    era: ['e', 'r', 'a'],
+    dusk: ['d', 'u', 's', 'k']
 };
 
 const secretGifs = {
@@ -151,15 +154,17 @@ const secretGifs = {
     gojo: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374437433708781/descarga_1.gif?ex=6983c9c2&is=69827842&hm=77e967bfa342f3ee25e2de532f013d564fde59ff97cee957f7520e0dc5149d26&',
     domain: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374411299000555/GOJO_USES_HIS_DOMAIN_EXPANSION___Jujutsu_Kaisen_-_4K_on_Make_a_GIF.gif?ex=6983c9bc&is=6982783c&hm=94950845fd8e0f907c39350f67d1f2bea8014831c2db2225b1f1a2ecfbe1fc07&',
     curse: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374418970509414/descarga_2.gif?ex=6983c9be&is=6982783e&hm=71b330f63c7a059f5638e214f163b7c6e65a6608a0236e47bb13c2bc1eb6947e&',
-    era: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468377281310363841/yuta-okkotsu-cursed-energy.gif?ex=6983cc68&is=69827ae8&hm=f4095524c8624b1055deaca82331ed01354fbc1c482e87031059196adce6b45e&'
-};
+    era: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468377281310363841/yuta-okkotsu-cursed-energy.gif?ex=6983cc68&is=69827ae8&hm=f4095524c8624b1055deaca82331ed01354fbc1c482e87031059196adce6b45e&',
+    dusk: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468395480898867250/descarga.jpg?ex=6983dd5c&is=69828bdc&hm=61a43f838180faaa004fa597572ae366e5b5a8ebd601dd7f2c5b77f0a1a97b4e&'
+}; 
 
 const secretNames = {
     sukuna: 'Rey de las Maldiciones',
     gojo: 'Infinito',
     domain: 'Expansión de Dominio',
     curse: 'Energía Maldita',
-    era: 'Cursed Era'
+    era: 'Cursed Era',
+    dusk: 'Ocaso'
 };
 
 const secretIcons = {
@@ -167,7 +172,8 @@ const secretIcons = {
     gojo: '♾️',
     domain: '🌀',
     curse: '⚡',
-    era: '💀'
+    era: '💀',
+    dusk: '🌙'
 };
 
 let keySequence = [];
@@ -176,7 +182,8 @@ let discoveredSecrets = JSON.parse(localStorage.getItem('discoveredSecrets')) ||
     gojo: false,
     domain: false,
     curse: false,
-    era: false
+    era: false,
+    dusk: false  // <-- AGREGAR
 };
 
 // ========== FUNCIONALIDAD DE INPUT MÓVIL PARA SECRETOS ==========
@@ -208,6 +215,9 @@ function checkSecretFromInput(inputValue) {
                         break;
                     case 'era':
                         triggerEraEffect();
+                        break;
+                        case 'dusk':
+                        triggerDuskEffect();
                         break;
                 }
                 
@@ -269,7 +279,21 @@ if (secretCodeInput) {
 function showSuccessNotification(message) {
     const notification = document.createElement('div');
     notification.className = 'secret-notification';
-    notification.style.background = 'linear-gradient(45deg, #00ff00, #00cc00)';
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(45deg, #00ff00, #00cc00);
+        color: #fff;
+        padding: 20px 40px;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        z-index: 10000;
+        box-shadow: 0 10px 40px rgba(0, 255, 0, 0.8);
+        animation: slideDown 0.5s ease;
+    `;
     notification.textContent = message;
     
     document.body.appendChild(notification);
@@ -286,7 +310,21 @@ function showSuccessNotification(message) {
 function showInfoNotification(message) {
     const notification = document.createElement('div');
     notification.className = 'secret-notification';
-    notification.style.background = 'linear-gradient(45deg, #00ffff, #0088ff)';
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(45deg, #00ffff, #0088ff);
+        color: #fff;
+        padding: 20px 40px;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        z-index: 10000;
+        box-shadow: 0 10px 40px rgba(0, 255, 255, 0.8);
+        animation: slideDown 0.5s ease;
+    `;
     notification.textContent = message;
     
     document.body.appendChild(notification);
@@ -303,7 +341,21 @@ function showInfoNotification(message) {
 function showErrorNotification(message) {
     const notification = document.createElement('div');
     notification.className = 'secret-notification';
-    notification.style.background = 'linear-gradient(45deg, #ff0066, #cc0044)';
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(45deg, #ff0066, #cc0044);
+        color: #fff;
+        padding: 20px 40px;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        z-index: 10000;
+        box-shadow: 0 10px 40px rgba(255, 0, 102, 0.8);
+        animation: slideDown 0.5s ease;
+    `;
     notification.textContent = message;
     
     document.body.appendChild(notification);
@@ -319,28 +371,39 @@ function showErrorNotification(message) {
 // Actualizar UI de secretos al cargar
 function updateSecretsUI() {
     let discovered = 0;
-    const secrets = ['sukuna', 'gojo', 'domain', 'curse', 'era'];
+  const secrets = ['sukuna', 'gojo', 'domain', 'curse', 'era', 'dusk'];
     
     secrets.forEach((key, index) => {
         const secretCard = document.getElementById(`secretCard${index + 1}`);
-        if (discoveredSecrets[key]) {
-            secretCard.classList.add('discovered');
-            secretCard.innerHTML = `
-                <div class="secret-icon">${secretIcons[key]}</div>
-                <div class="secret-name">${secretNames[key]}</div>
-            `;
-            discovered++;
+        if (secretCard) {
+            if (discoveredSecrets[key]) {
+                secretCard.classList.add('discovered');
+                secretCard.innerHTML = `
+                    <div class="secret-icon">${secretIcons[key]}</div>
+                    <div class="secret-name">${secretNames[key]}</div>
+                `;
+                discovered++;
+            } else {
+                secretCard.classList.remove('discovered');
+                secretCard.innerHTML = `
+                    <div class="secret-lock">🔒</div>
+                    <div class="secret-icon">${secretIcons[key]}</div>
+                    <div class="secret-name">???</div>
+                `;
+            }
         }
     });
     
-    const progress = (discovered / 5) * 100;
-    document.getElementById('secretsProgress').style.width = progress + '%';
-    document.getElementById('secretsText').textContent = `${discovered} / 5`;
+    const progress = (discovered / 6) * 100;
+    const progressBar = document.getElementById('secretsProgress');
+    const progressText = document.getElementById('secretsText');
+    
+    if (progressBar) progressBar.style.width = progress + '%';
+    if (progressText) progressText.textContent = `${discovered} / 6`;
 }
 
 // ========== CHIBI ASSISTANT ==========
 const chibiAssistant = document.getElementById('chibiAssistant');
-const chibiIcon = document.getElementById('chibiIcon');
 const speechBubble = document.getElementById('speechBubble');
 
 // Mensajes aleatorios para el chibi
@@ -359,6 +422,8 @@ let currentMessageIndex = 0;
 
 // Mostrar burbuja de diálogo aleatoriamente
 function showRandomMessage() {
+    if (!speechBubble) return;
+    
     currentMessageIndex = Math.floor(Math.random() * chibiMessages.length);
     speechBubble.textContent = chibiMessages[currentMessageIndex];
     speechBubble.classList.add('show');
@@ -367,13 +432,6 @@ function showRandomMessage() {
         speechBubble.classList.remove('show');
     }, 4000);
 }
-
-// Click en el chibi - redirigir al chat IA
-chibiIcon.addEventListener('click', function() {
-    modalTitle.textContent = 'Cursed IA';
-    modalText.textContent = '¡La inteligencia artificial maldita está en desarrollo! Pronto podrás chatear con nuestro asistente AI especializado en Jujutsu Kaisen. ¡Mantente atento!';
-    modal.style.display = 'block';
-});
 
 // ========== MENSAJES PERSONALIZADOS PARA SECCIONES ==========
 const sectionMessages = {
@@ -392,7 +450,7 @@ document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', function(e) {
         const section = this.getAttribute('data-section');
         
-        if (section) {
+        if (section && modal && modalTitle && modalText) {
             e.preventDefault();
             const message = sectionMessages[section];
             modalTitle.textContent = message.title;
@@ -403,17 +461,21 @@ document.querySelectorAll('.nav-link').forEach(link => {
 });
 
 // Abrir modal de quejas
-quejasBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    quejasModal.style.display = 'block';
-});
+if (quejasBtn && quejasModal) {
+    quejasBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        quejasModal.style.display = 'block';
+    });
+}
 
 // ========== JUEGO DE ENERGÍA MALDITA ==========
-energyGameBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    energyGameModal.style.display = 'block';
-    loadEnergyStats();
-});
+if (energyGameBtn && energyGameModal) {
+    energyGameBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        energyGameModal.style.display = 'block';
+        loadEnergyStats();
+    });
+}
 
 function generateEnergy() {
     const amount = Math.floor(Math.random() * 10) + 5;
@@ -426,9 +488,9 @@ function generateEnergy() {
     }
     
     // Actualizar UI
-    energyCounter.textContent = currentEnergy;
-    totalEnergy.textContent = totalEnergyGenerated;
-    bestStreak.textContent = maxStreak;
+    if (energyCounter) energyCounter.textContent = currentEnergy;
+    if (totalEnergy) totalEnergy.textContent = totalEnergyGenerated;
+    if (bestStreak) bestStreak.textContent = maxStreak;
     
     // Actualizar nivel
     updateEnergyLevel();
@@ -440,13 +502,17 @@ function generateEnergy() {
     createEnergyParticles();
     
     // Animación del botón
-    generateEnergyBtn.style.transform = 'scale(0.9)';
-    setTimeout(() => {
-        generateEnergyBtn.style.transform = 'scale(1)';
-    }, 100);
+    if (generateEnergyBtn) {
+        generateEnergyBtn.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            generateEnergyBtn.style.transform = 'scale(1)';
+        }, 100);
+    }
 }
 
 function createEnergyParticles() {
+    if (!energyParticles) return;
+    
     const particleCount = 15;
     
     for (let i = 0; i < particleCount; i++) {
@@ -479,7 +545,7 @@ function updateEnergyLevel() {
             break;
         }
     }
-    energyLevel.textContent = currentLevel;
+    if (energyLevel) energyLevel.textContent = currentLevel;
 }
 
 function saveEnergyStats() {
@@ -498,9 +564,9 @@ function loadEnergyStats() {
         totalEnergyGenerated = stats.totalEnergyGenerated || 0;
         maxStreak = stats.maxStreak || 0;
         
-        energyCounter.textContent = currentEnergy;
-        totalEnergy.textContent = totalEnergyGenerated;
-        bestStreak.textContent = maxStreak;
+        if (energyCounter) energyCounter.textContent = currentEnergy;
+        if (totalEnergy) totalEnergy.textContent = totalEnergyGenerated;
+        if (bestStreak) bestStreak.textContent = maxStreak;
         updateEnergyLevel();
     }
 }
@@ -512,24 +578,31 @@ function resetEnergyStats() {
         clickStreak = 0;
         maxStreak = 0;
         
-        energyCounter.textContent = '0';
-        totalEnergy.textContent = '0';
-        bestStreak.textContent = '0';
-        energyLevel.textContent = 'Grado 4';
+        if (energyCounter) energyCounter.textContent = '0';
+        if (totalEnergy) totalEnergy.textContent = '0';
+        if (bestStreak) bestStreak.textContent = '0';
+        if (energyLevel) energyLevel.textContent = 'Grado 4';
         
         localStorage.removeItem('energyStats');
     }
 }
 
-generateEnergyBtn.addEventListener('click', generateEnergy);
-resetEnergyBtn.addEventListener('click', resetEnergyStats);
+if (generateEnergyBtn) {
+    generateEnergyBtn.addEventListener('click', generateEnergy);
+}
+
+if (resetEnergyBtn) {
+    resetEnergyBtn.addEventListener('click', resetEnergyStats);
+}
 
 // ========== ESTADÍSTICAS DEL SERVIDOR ==========
-statsBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    statsModal.style.display = 'block';
-    fetchDiscordStats();
-});
+if (statsBtn && statsModal) {
+    statsBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        statsModal.style.display = 'block';
+        fetchDiscordStats();
+    });
+}
 
 async function fetchDiscordStats() {
     try {
@@ -555,8 +628,8 @@ async function fetchDiscordStats() {
             }
             
             // Actualizar UI con animación
-            animateCounter(memberCount, userCount + botCount);
-            animateCounter(onlineCount, totalMembers);
+            if (memberCount) animateCounter(memberCount, userCount + botCount);
+            if (onlineCount) animateCounter(onlineCount, totalMembers);
             
             // Actualizar el texto del tercer stat
             const statCards = document.querySelectorAll('.stat-card');
@@ -568,8 +641,8 @@ async function fetchDiscordStats() {
     } catch (error) {
         console.log('Error al obtener stats de Discord:', error);
         // Valores por defecto si falla
-        memberCount.textContent = '1,234';
-        onlineCount.textContent = '432';
+        if (memberCount) memberCount.textContent = '1,234';
+        if (onlineCount) onlineCount.textContent = '432';
     }
 }
 
@@ -588,11 +661,13 @@ function animateCounter(element, target) {
 }
 
 // ========== SECRETOS / EASTER EGGS ==========
-secretsBtn.addEventListener('click', function(e) {
-    e.preventDefault();
-    secretsModal.style.display = 'block';
-    updateSecretsUI();
-});
+if (secretsBtn && secretsModal) {
+    secretsBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        secretsModal.style.display = 'block';
+        updateSecretsUI();
+    });
+}
 
 // Detectar secuencias de teclas (solo para PC)
 document.addEventListener('keydown', function(e) {
@@ -613,58 +688,74 @@ document.addEventListener('keydown', function(e) {
 function checkSecretCodes() {
     const sequenceStr = keySequence.join('');
     
-    // SUKUNA - Siempre se puede activar
+    // SUKUNA
     if (sequenceStr.includes(secretCodes.sukuna.join(''))) {
         triggerSukunaEffect();
         if (!discoveredSecrets.sukuna) {
             discoveredSecrets.sukuna = true;
             saveDiscoveredSecrets();
+            updateSecretsUI();
         }
-        keySequence = []; // Limpiar secuencia
+        keySequence = [];
     }
     
-    // GOJO - Siempre se puede activar
+    // GOJO
     if (sequenceStr.includes(secretCodes.gojo.join(''))) {
         triggerGojoEffect();
         if (!discoveredSecrets.gojo) {
             discoveredSecrets.gojo = true;
             saveDiscoveredSecrets();
+            updateSecretsUI();
         }
         keySequence = [];
     }
     
-    // DOMAIN - Siempre se puede activar
+    // DOMAIN
     if (sequenceStr.includes(secretCodes.domain.join(''))) {
         triggerDomainEffect();
         if (!discoveredSecrets.domain) {
             discoveredSecrets.domain = true;
             saveDiscoveredSecrets();
+            updateSecretsUI();
         }
         keySequence = [];
     }
     
-    // CURSE - Siempre se puede activar
+    // CURSE
     if (sequenceStr.includes(secretCodes.curse.join(''))) {
         triggerCurseEffect();
         if (!discoveredSecrets.curse) {
             discoveredSecrets.curse = true;
             saveDiscoveredSecrets();
+            updateSecretsUI();
         }
         keySequence = [];
     }
     
-    // ERA - Nuevo secreto especial
+    // ERA
     if (sequenceStr.includes(secretCodes.era.join(''))) {
         triggerEraEffect();
         if (!discoveredSecrets.era) {
             discoveredSecrets.era = true;
             saveDiscoveredSecrets();
+            updateSecretsUI();
+        }
+        keySequence = [];
+    }
+// DUSK
+    if (sequenceStr.includes(secretCodes.dusk.join(''))) {
+        triggerDuskEffect();
+        if (!discoveredSecrets.dusk) {
+            discoveredSecrets.dusk = true;
+            saveDiscoveredSecrets();
+            updateSecretsUI();
         }
         keySequence = [];
     }
 }
-
-function triggerSukunaEffect() {
+function triggerDuskEffect() {
+    if (!easterEggOverlay) return;
+    
     easterEggOverlay.classList.add('active');
     easterEggOverlay.style.background = 'rgba(0, 0, 0, 0.95)';
     easterEggOverlay.innerHTML = `
@@ -683,6 +774,8 @@ function triggerSukunaEffect() {
 }
 
 function triggerGojoEffect() {
+    if (!easterEggOverlay) return;
+    
     easterEggOverlay.classList.add('active');
     easterEggOverlay.style.background = 'rgba(0, 0, 0, 0.95)';
     easterEggOverlay.innerHTML = `
@@ -701,6 +794,8 @@ function triggerGojoEffect() {
 }
 
 function triggerDomainEffect() {
+    if (!easterEggOverlay) return;
+    
     easterEggOverlay.classList.add('active');
     easterEggOverlay.style.background = 'rgba(0, 0, 0, 0.95)';
     easterEggOverlay.innerHTML = `
@@ -719,6 +814,8 @@ function triggerDomainEffect() {
 }
 
 function triggerCurseEffect() {
+    if (!easterEggOverlay) return;
+    
     easterEggOverlay.classList.add('active');
     easterEggOverlay.style.background = 'rgba(0, 0, 0, 0.95)';
     easterEggOverlay.innerHTML = `
@@ -731,16 +828,18 @@ function triggerCurseEffect() {
     // Crear partículas adicionales
     for (let i = 0; i < 50; i++) {
         const particle = document.createElement('div');
-        particle.style.position = 'fixed';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.width = '10px';
-        particle.style.height = '10px';
-        particle.style.background = 'linear-gradient(45deg, #ff0066, #8a2be2)';
-        particle.style.borderRadius = '50%';
-        particle.style.boxShadow = '0 0 20px rgba(138, 43, 226, 0.8)';
-        particle.style.zIndex = '9999';
-        particle.style.animation = 'float 3s ease-in-out';
+        particle.style.cssText = `
+            position: fixed;
+            left: ${Math.random() * 100}%;
+            top: ${Math.random() * 100}%;
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(45deg, #ff0066, #8a2be2);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.8);
+            z-index: 9999;
+            animation: float 3s ease-in-out;
+        `;
         document.body.appendChild(particle);
         
         setTimeout(() => {
@@ -755,8 +854,78 @@ function triggerCurseEffect() {
     
     showSecretNotification('¡Energía Maldita Liberada! ⚡');
 }
+function triggerDuskEffect() {
+    if (!easterEggOverlay) return;
+    
+    // Desbloquear juego de terror
+    localStorage.setItem('duskUnlocked', 'true');
+    
+    easterEggOverlay.classList.add('active');
+    easterEggOverlay.style.background = 'rgba(0, 0, 0, 1)';
+    easterEggOverlay.innerHTML = `
+        <div class="easter-egg-content" style="width: 100%; height: 100%;">
+            <img src="${secretGifs.dusk}" 
+                 alt="Dusk" 
+                 class="easter-egg-gif" 
+                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 0; position: absolute; top: 0; left: 0;">
+            <div class="easter-egg-text dusk-text">Te veo</div>
+        </div>
+    `;
+    
+    setTimeout(() => {
+        easterEggOverlay.classList.remove('active');
+        easterEggOverlay.innerHTML = '';
+        
+        // Mostrar notificación de juego desbloqueado
+        showSecretNotification('🌙 Nuevo juego desbloqueado: "La Biblioteca Maldita" 🌙');
+        
+        setTimeout(() => {
+            const unlockNotif = document.createElement('div');
+            unlockNotif.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, #1a0a1a, #0a0a1a);
+                border: 3px solid #8a2be2;
+                border-radius: 20px;
+                padding: 40px;
+                z-index: 10001;
+                text-align: center;
+                box-shadow: 0 0 50px rgba(138, 43, 226, 0.8);
+                animation: fadeIn 0.5s ease;
+            `;
+            unlockNotif.innerHTML = `
+                <h2 style="color: #ff0066; margin-bottom: 20px; font-size: 2rem;">🎮 Juego Desbloqueado 🎮</h2>
+                <p style="color: #fff; margin-bottom: 30px; font-size: 1.1rem;">
+                    Has desbloqueado "La Biblioteca Maldita"<br>
+                    Un juego de terror psicológico
+                </p>
+                <button onclick="this.parentElement.remove()" style="
+                    background: linear-gradient(45deg, #8a2be2, #ff0066);
+                    color: #fff;
+                    border: none;
+                    padding: 15px 40px;
+                    border-radius: 10px;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                    ¡Entendido!
+                </button>
+            `;
+            document.body.appendChild(unlockNotif);
+        }, 1000);
+        
+    }, 4000);
+    
+    showSecretNotification('🌙 Código "Dusk" activado 🌙');
+}
 
 function triggerEraEffect() {
+    if (!easterEggOverlay) return;
+    
     easterEggOverlay.classList.add('active');
     easterEggOverlay.style.background = 'rgba(0, 0, 0, 0.98)';
     easterEggOverlay.innerHTML = `
@@ -774,21 +943,25 @@ function triggerEraEffect() {
     showSecretNotification('💀 Cursed Era 💀');
 }
 
+
+
 function showSecretNotification(message) {
     const notification = document.createElement('div');
-    notification.style.position = 'fixed';
-    notification.style.top = '100px';
-    notification.style.left = '50%';
-    notification.style.transform = 'translateX(-50%)';
-    notification.style.background = 'linear-gradient(45deg, #8a2be2, #ff0066)';
-    notification.style.color = '#fff';
-    notification.style.padding = '20px 40px';
-    notification.style.borderRadius = '10px';
-    notification.style.fontSize = '1.2rem';
-    notification.style.fontWeight = 'bold';
-    notification.style.zIndex = '10000';
-    notification.style.boxShadow = '0 10px 40px rgba(138, 43, 226, 0.8)';
-    notification.style.animation = 'slideDown 0.5s ease';
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(45deg, #8a2be2, #ff0066);
+        color: #fff;
+        padding: 20px 40px;
+        border-radius: 10px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        z-index: 10000;
+        box-shadow: 0 10px 40px rgba(138, 43, 226, 0.8);
+        animation: slideDown 0.5s ease;
+    `;
     notification.textContent = message;
     
     document.body.appendChild(notification);
@@ -806,73 +979,89 @@ function saveDiscoveredSecrets() {
 }
 
 // ========== COPIAR EMAIL ==========
-copyEmailBtn.addEventListener('click', function() {
-    const email = 'cursed.era2@gmail.com';
-    
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(email).then(function() {
-            copyEmailBtn.textContent = '✅ ¡Copiado!';
-            copyEmailBtn.style.background = 'linear-gradient(45deg, #00ff00, #00cc00)';
-            
-            setTimeout(function() {
-                copyEmailBtn.textContent = '📋 Copiar';
-                copyEmailBtn.style.background = 'linear-gradient(45deg, #00ffff, #8a2be2)';
-            }, 2000);
-        }).catch(function() {
-            alert('Email: cursed.era2@gmail.com');
-        });
-    } else {
-        const textArea = document.createElement('textarea');
-        textArea.value = email;
-        textArea.style.position = 'fixed';
-        textArea.style.left = '-999999px';
-        document.body.appendChild(textArea);
-        textArea.select();
+if (copyEmailBtn) {
+    copyEmailBtn.addEventListener('click', function() {
+        const email = 'cursed.era2@gmail.com';
         
-        try {
-            document.execCommand('copy');
-            copyEmailBtn.textContent = '✅ ¡Copiado!';
-            copyEmailBtn.style.background = 'linear-gradient(45deg, #00ff00, #00cc00)';
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(email).then(function() {
+                copyEmailBtn.textContent = '✅ ¡Copiado!';
+                copyEmailBtn.style.background = 'linear-gradient(45deg, #00ff00, #00cc00)';
+                
+                setTimeout(function() {
+                    copyEmailBtn.textContent = '📋 Copiar';
+                    copyEmailBtn.style.background = 'linear-gradient(45deg, #00ffff, #8a2be2)';
+                }, 2000);
+            }).catch(function() {
+                alert('Email: cursed.era2@gmail.com');
+            });
+        } else {
+            const textArea = document.createElement('textarea');
+            textArea.value = email;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.select();
             
-            setTimeout(function() {
-                copyEmailBtn.textContent = '📋 Copiar';
-                copyEmailBtn.style.background = 'linear-gradient(45deg, #00ffff, #8a2be2)';
-            }, 2000);
-        } catch (err) {
-            alert('Email: cursed.era2@gmail.com');
+            try {
+                document.execCommand('copy');
+                copyEmailBtn.textContent = '✅ ¡Copiado!';
+                copyEmailBtn.style.background = 'linear-gradient(45deg, #00ff00, #00cc00)';
+                
+                setTimeout(function() {
+                    copyEmailBtn.textContent = '📋 Copiar';
+                    copyEmailBtn.style.background = 'linear-gradient(45deg, #00ffff, #8a2be2)';
+                }, 2000);
+            } catch (err) {
+                alert('Email: cursed.era2@gmail.com');
+            }
+            
+            document.body.removeChild(textArea);
         }
-        
-        document.body.removeChild(textArea);
-    }
-});
+    });
+}
 
 // ========== CERRAR MODALES ==========
-closeBtn.onclick = function() {
-    modal.style.display = 'none';
+if (closeBtn && modal) {
+    closeBtn.onclick = function() {
+        modal.style.display = 'none';
+    }
 }
 
-modalCloseButton.onclick = function() {
-    modal.style.display = 'none';
+if (modalCloseButton && modal) {
+    modalCloseButton.onclick = function() {
+        modal.style.display = 'none';
+    }
 }
 
-quejasCloseBtn.onclick = function() {
-    quejasModal.style.display = 'none';
+if (quejasCloseBtn && quejasModal) {
+    quejasCloseBtn.onclick = function() {
+        quejasModal.style.display = 'none';
+    }
 }
 
-quejasModalCloseBtn.onclick = function() {
-    quejasModal.style.display = 'none';
+if (quejasModalCloseBtn && quejasModal) {
+    quejasModalCloseBtn.onclick = function() {
+        quejasModal.style.display = 'none';
+    }
 }
 
-energyGameCloseBtn.onclick = function() {
-    energyGameModal.style.display = 'none';
+if (energyGameCloseBtn && energyGameModal) {
+    energyGameCloseBtn.onclick = function() {
+        energyGameModal.style.display = 'none';
+    }
 }
 
-statsCloseBtn.onclick = function() {
-    statsModal.style.display = 'none';
+if (statsCloseBtn && statsModal) {
+    statsCloseBtn.onclick = function() {
+        statsModal.style.display = 'none';
+    }
 }
 
-secretsCloseBtn.onclick = function() {
-    secretsModal.style.display = 'none';
+if (secretsCloseBtn && secretsModal) {
+    secretsCloseBtn.onclick = function() {
+        secretsModal.style.display = 'none';
+    }
 }
 
 window.onclick = function(event) {

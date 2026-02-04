@@ -1466,3 +1466,104 @@ h1::before {
         bottom: 85px;
     }
 }
+.dusk-text {
+    font-family: 'Courier New', monospace;
+    font-size: 4rem;
+    color: #fff;
+    text-shadow: 
+        0 0 10px rgba(255, 0, 0, 0.8),
+        0 0 20px rgba(0, 0, 0, 0.9),
+        2px 2px 4px rgba(255, 255, 255, 0.3),
+        -2px -2px 4px rgba(0, 0, 0, 0.8);
+    animation: duskGlitch 0.3s infinite, duskFlicker 1.5s infinite;
+    letter-spacing: 0.3em;
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    filter: blur(1px);
+}
+
+@keyframes duskGlitch {
+    0% { 
+        transform: translate(-50%, -50%) skew(0deg);
+        text-shadow: 
+            0 0 10px rgba(255, 0, 0, 0.8),
+            0 0 20px rgba(0, 0, 0, 0.9);
+    }
+    20% { 
+        transform: translate(-48%, -50%) skew(2deg);
+        text-shadow: 
+            -3px 0 10px rgba(255, 0, 0, 0.8),
+            3px 0 20px rgba(0, 255, 0, 0.5);
+    }
+    40% { 
+        transform: translate(-52%, -50%) skew(-2deg);
+        text-shadow: 
+            3px 0 10px rgba(0, 0, 255, 0.8),
+            -3px 0 20px rgba(255, 0, 0, 0.5);
+    }
+    60% { 
+        transform: translate(-50%, -48%) skew(1deg);
+        text-shadow: 
+            0 -3px 10px rgba(255, 255, 0, 0.8),
+            0 3px 20px rgba(255, 0, 255, 0.5);
+    }
+    80% { 
+        transform: translate(-50%, -52%) skew(-1deg);
+        text-shadow: 
+            0 3px 10px rgba(0, 255, 255, 0.8),
+            0 -3px 20px rgba(255, 0, 0, 0.5);
+    }
+    100% { 
+        transform: translate(-50%, -50%) skew(0deg);
+        text-shadow: 
+            0 0 10px rgba(255, 0, 0, 0.8),
+            0 0 20px rgba(0, 0, 0, 0.9);
+    }
+}
+
+@keyframes duskFlicker {
+    0%, 100% { 
+        opacity: 1;
+        filter: blur(1px);
+    }
+    10% { 
+        opacity: 0.8;
+        filter: blur(2px);
+    }
+    20% { 
+        opacity: 1;
+        filter: blur(0.5px);
+    }
+    30% { 
+        opacity: 0.9;
+        filter: blur(1.5px);
+    }
+    40% { 
+        opacity: 1;
+        filter: blur(1px);
+    }
+    50% { 
+        opacity: 0.7;
+        filter: blur(3px);
+    }
+    60% { 
+        opacity: 1;
+        filter: blur(0.5px);
+    }
+    70% { 
+        opacity: 0.85;
+        filter: blur(2px);
+    }
+    80% { 
+        opacity: 1;
+        filter: blur(1px);
+    }
+    90% { 
+        opacity: 0.9;
+        filter: blur(1.5px);
+    }
+}
