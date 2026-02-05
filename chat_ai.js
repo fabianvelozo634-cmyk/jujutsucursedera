@@ -444,3 +444,5 @@ async function sendFloatingMessage() {
         if (floatingInput) floatingInput.focus();
     }
 }
+
+// este es el chat_ai.js

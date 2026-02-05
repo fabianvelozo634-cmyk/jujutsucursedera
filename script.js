@@ -3,32 +3,25 @@ const loadingScreen = document.getElementById('loadingScreen');
 const loadingProgress = document.getElementById('loadingProgress');
 const deviceModal = document.getElementById('deviceModal');
 
-// Verificar si ya se seleccionó dispositivo antes
 let devicePreference = localStorage.getItem('devicePreference');
 
-// Simular carga
 window.addEventListener('load', function() {
-    // Esperar a que la barra de carga complete (2.5s de animación)
     setTimeout(function() {
-        // Fade out de la pantalla de carga
-        loadingScreen.classList.add('fade-out');
-        
-        // Después del fade out, mostrar el modal de dispositivo si es necesario
-        setTimeout(function() {
-            loadingScreen.style.display = 'none';
-            
-            // Si ya tiene preferencia guardada, aplicarla y no mostrar modal
-            if (devicePreference) {
-                document.body.classList.add(devicePreference);
-                // Iniciar mensajes del chibi después de cargar
-                setTimeout(showRandomMessage, 2000);
-                setInterval(showRandomMessage, 15000);
-            } else {
-                // Primera vez, mostrar modal de selección
-                deviceModal.classList.add('show');
-            }
-        }, 800); // Duración del fade-out
-    }, 2500); // Duración de la barra de carga
+        if (loadingScreen) {
+            loadingScreen.classList.add('fade-out');
+            setTimeout(function() {
+                if (loadingScreen) loadingScreen.style.display = 'none';
+                
+                if (devicePreference) {
+                    document.body.classList.add(devicePreference);
+                    setTimeout(showRandomMessage, 2000);
+                    setInterval(showRandomMessage, 15000);
+                } else {
+                    if (deviceModal) deviceModal.classList.add('show');
+                }
+            }, 800);
+        }
+    }, 2500);
 });
 
 // ========== PARTÍCULAS ANIMADAS ==========
@@ -150,12 +143,12 @@ const secretCodes = {
 };
 
 const secretGifs = {
-    sukuna: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374458975912113/descarga.gif?ex=6983c9c8&is=69827848&hm=50b5bd2a8278314daa5ad95ebe48c563181ae7090f161d53b37be57e9ee1a322&',
-    gojo: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374437433708781/descarga_1.gif?ex=6983c9c2&is=69827842&hm=77e967bfa342f3ee25e2de532f013d564fde59ff97cee957f7520e0dc5149d26&',
-    domain: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374411299000555/GOJO_USES_HIS_DOMAIN_EXPANSION___Jujutsu_Kaisen_-_4K_on_Make_a_GIF.gif?ex=6983c9bc&is=6982783c&hm=94950845fd8e0f907c39350f67d1f2bea8014831c2db2225b1f1a2ecfbe1fc07&',
-    curse: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374418970509414/descarga_2.gif?ex=6983c9be&is=6982783e&hm=71b330f63c7a059f5638e214f163b7c6e65a6608a0236e47bb13c2bc1eb6947e&',
-    era: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468377281310363841/yuta-okkotsu-cursed-energy.gif?ex=6983cc68&is=69827ae8&hm=f4095524c8624b1055deaca82331ed01354fbc1c482e87031059196adce6b45e&',
-    dusk: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468395480898867250/descarga.jpg?ex=6983dd5c&is=69828bdc&hm=61a43f838180faaa004fa597572ae366e5b5a8ebd601dd7f2c5b77f0a1a97b4e&'
+    sukuna: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374458975912113/descarga.gif?ex=6985c408&is=69847288&hm=94fb49a1ac48f9f934867e44c27c31629e35cc5b32b4d6ebcc904e01225389e0&',
+    gojo: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374437433708781/descarga_1.gif?ex=6985c402&is=69847282&hm=22d6c094db8e2c2b5d734ba73e19702a656238816ae0f22199384ede8ce019f7&',
+    domain: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374411299000555/GOJO_USES_HIS_DOMAIN_EXPANSION___Jujutsu_Kaisen_-_4K_on_Make_a_GIF.gif?ex=6985c3fc&is=6984727c&hm=f68b046b6b614a2865fdd9f2aa9235fc11239c7aba5f3590471120620686063e&',
+    curse: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374418970509414/descarga_2.gif?ex=6985c3fe&is=6984727e&hm=f1c4b8adbf5a425766a6fad08ac9583bee6374d0953c4725cca9f1960777bba0&',
+    era: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468377281310363841/yuta-okkotsu-cursed-energy.gif?ex=6985c6a8&is=69847528&hm=2e4a51c1961ba2191e3713f592b852a3752bfa753613fe96b4b013ade8a5c215&',
+    dusk: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468395480898867250/descarga.jpg?ex=6985d79c&is=6984861c&hm=7d6b0a88765cd997037d549ef534eea5113db0c27e0dc4736bb874b56a4dd640&'
 }; 
 
 const secretNames = {
@@ -183,7 +176,7 @@ let discoveredSecrets = JSON.parse(localStorage.getItem('discoveredSecrets')) ||
     domain: false,
     curse: false,
     era: false,
-    dusk: false  // <-- AGREGAR
+    dusk: false
 };
 
 // ========== FUNCIONALIDAD DE INPUT MÓVIL PARA SECRETOS ==========
@@ -216,7 +209,7 @@ function checkSecretFromInput(inputValue) {
                     case 'era':
                         triggerEraEffect();
                         break;
-                        case 'dusk':
+                    case 'dusk':
                         triggerDuskEffect();
                         break;
                 }
@@ -371,7 +364,7 @@ function showErrorNotification(message) {
 // Actualizar UI de secretos al cargar
 function updateSecretsUI() {
     let discovered = 0;
-  const secrets = ['sukuna', 'gojo', 'domain', 'curse', 'era', 'dusk'];
+    const secrets = ['sukuna', 'gojo', 'domain', 'curse', 'era', 'dusk'];
     
     secrets.forEach((key, index) => {
         const secretCard = document.getElementById(`secretCard${index + 1}`);
@@ -742,7 +735,8 @@ function checkSecretCodes() {
         }
         keySequence = [];
     }
-// DUSK
+
+    // DUSK
     if (sequenceStr.includes(secretCodes.dusk.join(''))) {
         triggerDuskEffect();
         if (!discoveredSecrets.dusk) {
@@ -753,7 +747,9 @@ function checkSecretCodes() {
         keySequence = [];
     }
 }
-function triggerDuskEffect() {
+
+
+function triggerSukunaEffect() {
     if (!easterEggOverlay) return;
     
     easterEggOverlay.classList.add('active');
@@ -854,6 +850,7 @@ function triggerCurseEffect() {
     
     showSecretNotification('¡Energía Maldita Liberada! ⚡');
 }
+
 function triggerDuskEffect() {
     if (!easterEggOverlay) return;
     
@@ -942,8 +939,6 @@ function triggerEraEffect() {
     
     showSecretNotification('💀 Cursed Era 💀');
 }
-
-
 
 function showSecretNotification(message) {
     const notification = document.createElement('div');
@@ -1082,12 +1077,657 @@ window.onclick = function(event) {
     }
 }
 
-// ========== RESETEAR PREFERENCIA DE DISPOSITIVO ==========
-const resetDeviceBtn = document.getElementById('resetDevice');
-if (resetDeviceBtn) {
-    resetDeviceBtn.addEventListener('click', function(e) {
+// ========== CONFIGURACIÓN Y AJUSTES ==========
+const configBtn = document.getElementById('configBtn');
+const configModal = document.getElementById('configModal');
+const configCloseBtn = document.getElementById('configCloseBtn');
+
+// Abrir modal de configuración (SIN recargar página)
+if (configBtn) {
+    configBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        localStorage.removeItem('devicePreference');
-        location.reload();
+        if (configModal) {
+            configModal.style.display = 'block';
+            loadConfigSettings();
+        }
     });
 }
+
+// Cerrar modal
+if (configCloseBtn) {
+    configCloseBtn.addEventListener('click', () => {
+        if (configModal) configModal.style.display = 'none';
+    });
+}
+
+// Cerrar al hacer click fuera
+window.addEventListener('click', (e) => {
+    if (e.target === configModal) {
+        configModal.style.display = 'none';
+    }
+});
+
+// Cargar configuración guardada
+function loadConfigSettings() {
+    // Cargar preferencia de dispositivo
+    const savedDevice = localStorage.getItem('devicePreference');
+    if (savedDevice) {
+        const deviceRadio = document.querySelector(`input[name="deviceType"][value="${savedDevice}"]`);
+        if (deviceRadio) deviceRadio.checked = true;
+    }
+    
+    // Cargar tema
+    const savedTheme = localStorage.getItem('siteTheme') || 'dark';
+    const themeRadio = document.querySelector(`input[name="themeType"][value="${savedTheme}"]`);
+    if (themeRadio) themeRadio.checked = true;
+    
+    // Cargar color de fondo personalizado
+    const savedBgColor = localStorage.getItem('customBgColor');
+    const bgColorInput = document.getElementById('customBgColor');
+    if (savedBgColor && bgColorInput) {
+        bgColorInput.value = savedBgColor;
+    }
+    
+    // Cargar estado de efectos
+    const cursedEffects = localStorage.getItem('cursedEffects') !== 'false';
+    const effectsCheckbox = document.getElementById('cursedEffectsToggle');
+    if (effectsCheckbox) effectsCheckbox.checked = cursedEffects;
+    
+    const customCursor = localStorage.getItem('customCursor') !== 'false';
+    const cursorCheckbox = document.getElementById('customCursorToggle');
+    if (cursorCheckbox) cursorCheckbox.checked = customCursor;
+}
+
+// Cambiar dispositivo
+const deviceRadios = document.querySelectorAll('input[name="deviceType"]');
+deviceRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        const newDevice = e.target.value;
+        
+        // Remover clases anteriores
+        document.body.classList.remove('pc-mode', 'mobile-mode');
+        
+        // Agregar nueva clase
+        document.body.classList.add(newDevice);
+        
+        // Guardar preferencia
+        localStorage.setItem('devicePreference', newDevice);
+        
+        // Mostrar confirmación
+        showConfigNotification('Dispositivo cambiado a ' + (newDevice === 'pc-mode' ? 'PC' : 'Móvil'));
+    });
+});
+
+// Cambiar tema
+const themeRadios = document.querySelectorAll('input[name="themeType"]');
+themeRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+        const newTheme = e.target.value;
+        applyTheme(newTheme);
+        localStorage.setItem('siteTheme', newTheme);
+        showConfigNotification('Tema aplicado: ' + newTheme);
+    });
+});
+
+// Aplicar tema
+function applyTheme(theme) {
+    const body = document.body;
+    
+    // Remover temas anteriores
+    body.classList.remove('theme-dark', 'theme-light', 'theme-shibuya');
+    
+    // Aplicar nuevo tema
+    body.classList.add('theme-' + theme);
+    
+    // Estilos específicos por tema
+    switch(theme) {
+        case 'dark':
+            body.style.background = 'linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 50%, #0a0a1a 100%)';
+            break;
+        case 'light':
+            body.style.background = 'linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 50%, #f0f0f0 100%)';
+            body.style.color = '#222';
+            break;
+        case 'shibuya':
+            body.style.background = 'linear-gradient(135deg, #1a0000 0%, #000000 50%, #0a0000 100%)';
+            body.style.color = '#ff4d4d';
+            break;
+    }
+}
+
+// Color de fondo personalizado
+const customBgInput = document.getElementById('customBgColor');
+if (customBgInput) {
+    customBgInput.addEventListener('change', (e) => {
+        const color = e.target.value;
+        document.body.style.background = color;
+        localStorage.setItem('customBgColor', color);
+        showConfigNotification('Color de fondo personalizado aplicado');
+    });
+}
+
+// Toggle de efectos cursed
+const cursedEffectsToggle = document.getElementById('cursedEffectsToggle');
+if (cursedEffectsToggle) {
+    cursedEffectsToggle.addEventListener('change', (e) => {
+        const enabled = e.target.checked;
+        localStorage.setItem('cursedEffects', enabled);
+        
+        if (enabled) {
+            enableCursedScrollEffects();
+            showConfigNotification('Efectos de energía maldita activados ⚡');
+        } else {
+            disableCursedScrollEffects();
+            showConfigNotification('Efectos desactivados');
+        }
+    });
+}
+
+// Toggle de cursor personalizado (Gojo chibi neon)
+const customCursorToggle = document.getElementById('customCursorToggle');
+if (customCursorToggle) {
+    customCursorToggle.addEventListener('change', (e) => {
+        const enabled = e.target.checked;
+        localStorage.setItem('customCursor', enabled);
+        
+        if (enabled) {
+            enableCustomCursor();   // ← ahora usa la versión Gojo neon
+            showConfigNotification('Cursor Gojo activado ✨');
+        } else {
+            disableCustomCursor();
+            showConfigNotification('Cursor normal restaurado');
+        }
+    });
+}
+
+// Función para mostrar notificaciones de configuración
+function showConfigNotification(message) {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 30px;
+        background: linear-gradient(45deg, #8a2be2, #00ffff);
+        color: #fff;
+        padding: 15px 25px;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-weight: bold;
+        z-index: 10001;
+        box-shadow: 0 5px 20px rgba(138, 43, 226, 0.6);
+        animation: slideInRight 0.4s ease;
+    `;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 2500);
+}
+
+// ========== EFECTOS DE SCROLL CURSED ENERGY ==========
+let scrollParticlesContainer = null;
+
+function enableCursedScrollEffects() {
+    if (!scrollParticlesContainer) {
+        scrollParticlesContainer = document.createElement('div');
+        scrollParticlesContainer.id = 'scrollCursedParticles';
+        scrollParticlesContainer.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        `;
+        document.body.appendChild(scrollParticlesContainer);
+    }
+    
+    window.addEventListener('scroll', createScrollParticles);
+}
+
+function disableCursedScrollEffects() {
+    window.removeEventListener('scroll', createScrollParticles);
+    if (scrollParticlesContainer) {
+        scrollParticlesContainer.remove();
+        scrollParticlesContainer = null;
+    }
+}
+
+function createScrollParticles() {
+    if (!scrollParticlesContainer) return;
+    
+    // Crear 2-3 partículas por evento de scroll
+    for (let i = 0; i < 2; i++) {
+        const particle = document.createElement('div');
+        const x = Math.random() * window.innerWidth;
+        const y = window.scrollY + Math.random() * window.innerHeight;
+        
+        const colors = ['#8a2be2', '#ff0066', '#00ffff'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        particle.style.cssText = `
+            position: absolute;
+            left: ${x}px;
+            top: ${y}px;
+            width: 8px;
+            height: 8px;
+            background: ${color};
+            border-radius: 50%;
+            pointer-events: none;
+            animation: cursedParticleFade 1.5s ease-out forwards;
+            box-shadow: 0 0 15px ${color};
+        `;
+        
+        scrollParticlesContainer.appendChild(particle);
+        
+        setTimeout(() => particle.remove(), 1500);
+    }
+}
+
+// ========== CURSOR PERSONALIZADO ==========
+let customCursorElement = null;
+let cursorTrail = [];
+
+function enableCustomCursor() {
+    // Crear elemento de cursor
+    if (!customCursorElement) {
+        customCursorElement = document.createElement('div');
+        customCursorElement.id = 'customCursor';
+        customCursorElement.style.cssText = `
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.8), rgba(255, 0, 102, 0.8));
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.1s ease;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.8);
+        `;
+        document.body.appendChild(customCursorElement);
+    }
+    
+    // Ocultar cursor por defecto
+    document.body.style.cursor = 'none';
+    document.querySelectorAll('a, button, input, textarea').forEach(el => {
+        el.style.cursor = 'none';
+    });
+    
+    // Seguir movimiento del mouse
+    document.addEventListener('mousemove', updateCustomCursor);
+    document.addEventListener('mousedown', scaleDownCursor);
+    document.addEventListener('mouseup', scaleUpCursor);
+}
+
+function enableCustomCursor() {
+    if (customCursorElement) return;
+
+    customCursorElement = document.createElement('div');
+    customCursorElement.id = 'customGojoCursor';
+    document.body.appendChild(customCursorElement);
+
+    // Ocultar cursor del sistema
+    document.body.style.cursor = 'none';
+    document.querySelectorAll('a, button, input, textarea, .nav-link').forEach(el => {
+        el.style.cursor = 'none';
+    });
+
+    document.addEventListener('mousemove', moveGojoCursor);
+    document.addEventListener('mousedown', scaleGojoCursor);
+    document.addEventListener('mouseup', resetGojoCursorScale);
+}
+
+function disableCustomCursor() {
+    if (customCursorElement) {
+        customCursorElement.remove();
+        customCursorElement = null;
+    }
+    document.body.style.cursor = 'auto';
+    document.querySelectorAll('a, button, input, textarea, .nav-link').forEach(el => {
+        el.style.cursor = 'pointer';
+    });
+
+    document.removeEventListener('mousemove', moveGojoCursor);
+    document.removeEventListener('mousedown', scaleGojoCursor);
+    document.removeEventListener('mouseup', resetGojoCursorScale);
+}
+
+function moveGojoCursor(e) {
+    if (!customCursorElement) return;
+    customCursorElement.style.left = `${e.clientX}px`;
+    customCursorElement.style.top = `${e.clientY}px`;
+}
+
+function scaleGojoCursor() {
+    if (customCursorElement) {
+        customCursorElement.style.transform = 'translate(-50%, -50%) scale(0.85)';
+    }
+}
+
+function resetGojoCursorScale() {
+    if (customCursorElement) {
+        customCursorElement.style.transform = 'translate(-50%, -50%) scale(1)';
+    }
+}
+
+function disableCustomCursor() {
+    if (customCursorElement) {
+        customCursorElement.remove();
+        customCursorElement = null;
+    }
+    document.body.style.cursor = 'auto';
+    document.querySelectorAll('a, button, input, textarea, .nav-link').forEach(el => {
+        el.style.cursor = 'pointer';
+    });
+
+    document.removeEventListener('mousemove', moveGojoCursor);
+    document.removeEventListener('mousedown', scaleGojoCursor);
+    document.removeEventListener('mouseup', resetGojoCursorScale);
+}
+
+function moveGojoCursor(e) {
+    if (!customCursorElement) return;
+    customCursorElement.style.left = `${e.clientX}px`;
+    customCursorElement.style.top = `${e.clientY}px`;
+}
+
+function scaleGojoCursor() {
+    if (customCursorElement) {
+        customCursorElement.style.transform = 'translate(-50%, -50%) scale(0.85)';
+    }
+}
+
+function resetGojoCursorScale() {
+    if (customCursorElement) {
+        customCursorElement.style.transform = 'translate(-50%, -50%) scale(1)';
+    }
+}
+function updateCustomCursor(e) {
+    if (!customCursorElement) return;
+    
+    customCursorElement.style.left = e.clientX - 10 + 'px';
+    customCursorElement.style.top = e.clientY - 10 + 'px';
+    
+    // Crear estela ocasionalmente
+    if (Math.random() < 0.3) {
+        createCursorTrail(e.clientX, e.clientY);
+    }
+}
+
+function scaleDownCursor() {
+    if (customCursorElement) {
+        customCursorElement.style.transform = 'scale(0.8)';
+    }
+}
+
+function scaleUpCursor() {
+    if (customCursorElement) {
+        customCursorElement.style.transform = 'scale(1)';
+    }
+}
+
+function createCursorTrail(x, y) {
+    const trail = document.createElement('div');
+    trail.style.cssText = `
+        position: fixed;
+        left: ${x - 5}px;
+        top: ${y - 5}px;
+        width: 10px;
+        height: 10px;
+        background: rgba(138, 43, 226, 0.5);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        animation: trailFade 0.8s ease-out forwards;
+    `;
+    
+    document.body.appendChild(trail);
+    setTimeout(() => trail.remove(), 800);
+}
+
+// ========== CARGAR CONFIGURACIÓN AL INICIAR ==========
+window.addEventListener('load', () => {
+    // Cargar tema guardado
+    const savedTheme = localStorage.getItem('siteTheme') || 'dark';
+    applyTheme(savedTheme);
+    
+    // Cargar efectos
+    const cursedEffects = localStorage.getItem('cursedEffects') !== 'false';
+    if (cursedEffects) enableCursedScrollEffects();
+    
+    const customCursor = localStorage.getItem('customCursor') !== 'false';
+    if (customCursor) enableCustomCursor();
+    
+    // Cargar color personalizado si existe
+    const savedBgColor = localStorage.getItem('customBgColor');
+    if (savedBgColor) {
+        document.body.style.background = savedBgColor;
+    }
+    function openThemesModal() {
+   
+if (themesBtn) {
+    themesBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openThemesModal();
+    });
+}
+const themesCloseBtn = document.getElementById('themesCloseBtn');
+if (themesCloseBtn) {
+    themesCloseBtn.addEventListener('click', () => {
+        const themesModal = document.getElementById('themesModal');
+        if (themesModal) themesModal.style.display = 'none';
+    });
+}
+
+// Click fuera del modal
+window.addEventListener('click', (e) => {
+    const themesModal = document.getElementById('themesModal');
+    if (e.target === themesModal) {
+        themesModal.style.display = 'none';
+    }
+});
+    
+    const grid = document.getElementById('themesGrid');
+    if (!grid) return;
+    
+    grid.innerHTML = '';
+    
+    // Usar los temas globales definidos en themes.js
+    const themesToUse = typeof themes !== 'undefined' ? themes : {
+        oscuro: {
+            name: 'Oscuro',
+            icon: '🌙',
+            primaryColor: '#8a2be2',
+            secondaryColor: '#00ffff',
+            background: 'linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 50%, #0a0a1a 100%)',
+            glowColor: 'rgba(138, 43, 226, 0.8)'
+        },
+        gojo: {
+            name: 'Gojo Satoru',
+            icon: '♾️',
+            primaryColor: '#00ffff',
+            secondaryColor: '#0099ff',
+            background: 'linear-gradient(135deg, #001a3d 0%, #000055 50%, #0a0a1a 100%)',
+            glowColor: 'rgba(0, 255, 255, 0.8)'
+        },
+        sukuna: {
+            name: 'Sukuna',
+            icon: '👹',
+            primaryColor: '#ff0066',
+            secondaryColor: '#ff3366',
+            background: 'linear-gradient(135deg, #2d0000 0%, #1a0000 50%, #0a0000 100%)',
+            glowColor: 'rgba(255, 0, 102, 0.8)'
+        }
+    };
+    
+    // Crear tarjetas de temas
+    Object.entries(themesToUse).forEach(([key, theme]) => {
+        const card = document.createElement('div');
+        card.style.cssText = `
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(255, 0, 102, 0.3));
+            border: 2px solid ${theme.primaryColor};
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        `;
+        
+        card.innerHTML = `
+            <div style="font-size: 3rem; margin-bottom: 15px;">${theme.icon}</div>
+            <div style="font-size: 1.2rem; font-weight: bold; color: ${theme.primaryColor}; margin-bottom: 10px;">${theme.name}</div>
+            <div style="width: 100%; height: 40px; border-radius: 10px; background: ${theme.background}; margin-bottom: 15px; border: 2px solid ${theme.primaryColor};"></div>
+            <button onclick="applyTheme('${key}')" style="
+                background: linear-gradient(45deg, ${theme.primaryColor}, ${theme.secondaryColor});
+                border: none; padding: 10px 25px; border-radius: 8px;
+                color: #fff; font-size: 0.95rem; cursor: pointer; font-weight: bold; width: 100%;
+                transition: all 0.3s;
+            ">Aplicar</button>
+        `;
+        
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-5px)';
+            card.style.boxShadow = `0 10px 30px ${theme.glowColor}`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0)';
+            card.style.boxShadow = 'none';
+        });
+        
+        grid.appendChild(card);
+    });
+}
+});
+const applyCustomThemeBtn = document.getElementById('applyCustomThemeBtn');
+if (applyCustomThemeBtn) {
+    applyCustomThemeBtn.addEventListener('click', () => {
+        const customTheme = {
+            bg1: document.getElementById('customBg1')?.value || '#0a0a0a',
+            bg2: document.getElementById('customBg2')?.value || '#1a0a1a',
+            bg3: document.getElementById('customBg3')?.value || '#0a0a1a',
+            primary: document.getElementById('customPrimary')?.value || '#8a2be2',
+            secondary: document.getElementById('customSecondary')?.value || '#ff0066'
+        };
+        
+        if (typeof createCustomTheme === 'function') {
+            createCustomTheme(customTheme);
+        }
+        // ========== TEMAS ==========
+    const themesBtn = document.getElementById('themesBtn');
+    const themesModal = document.getElementById('themesModal');
+    const themesCloseBtn = document.getElementById('themesCloseBtn');
+    const themesGrid = document.getElementById('themesGrid');
+
+    if (themesBtn) {
+        themesBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (themesModal) {
+                themesModal.style.display = 'block';
+                cargarTemas();
+            }
+        });
+    }
+
+    if (themesCloseBtn) {
+        themesCloseBtn.addEventListener('click', () => {
+            if (themesModal) themesModal.style.display = 'none';
+        });
+    }
+
+    window.addEventListener('click', (e) => {
+        if (e.target === themesModal) themesModal.style.display = 'none';
+    });
+
+    function cargarTemas() {
+        if (!themesGrid || !window.TEMAS_DISPONIBLES) return;
+        
+        themesGrid.innerHTML = '';
+        
+        Object.entries(window.TEMAS_DISPONIBLES).forEach(([key, tema]) => {
+            const tarjeta = document.createElement('div');
+            tarjeta.style.cssText = `
+                background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(255, 0, 102, 0.3));
+                border: 2px solid ${tema.primaryColor};
+                border-radius: 15px;
+                padding: 20px;
+                text-align: center;
+                cursor: pointer;
+                transition: all 0.3s;
+            `;
+            
+            tarjeta.innerHTML = `
+                <div style="font-size: 3rem; margin-bottom: 15px;">${tema.icon}</div>
+                <div style="font-size: 1.1rem; font-weight: bold; color: ${tema.primaryColor}; margin-bottom: 10px;">${tema.name}</div>
+                <div style="width: 100%; height: 30px; border-radius: 10px; background: ${tema.background}; margin-bottom: 15px; border: 2px solid ${tema.primaryColor};"></div>
+                <button onclick="window.aplicarTema('${key}')" style="
+                    background: linear-gradient(45deg, ${tema.primaryColor}, ${tema.secondaryColor});
+                    border: none; padding: 10px 20px; border-radius: 8px;
+                    color: #fff; font-size: 0.9rem; cursor: pointer; font-weight: bold; width: 100%;
+                ">Aplicar</button>
+            `;
+            
+            tarjeta.addEventListener('mouseenter', () => {
+                tarjeta.style.transform = 'translateY(-5px)';
+                tarjeta.style.boxShadow = `0 10px 30px ${tema.glowColor}`;
+            });
+            
+            tarjeta.addEventListener('mouseleave', () => {
+                tarjeta.style.transform = 'translateY(0)';
+                tarjeta.style.boxShadow = 'none';
+            });
+            
+            themesGrid.appendChild(tarjeta);
+        });
+    }
+    });
+}
+const GUILD_ID = "1462216432094937214";
+
+async function updateOnlineCount() {
+    const onlineCountEl = document.getElementById('onlineCount');
+    if (!onlineCountEl) return;
+
+    try {
+        const response = await fetch(`https://discord.com/api/guilds/1462216432094937214/widget.json`);
+
+        // Si quieres debug temporal, puedes dejar solo el status
+        console.log('Status del widget:', response.status);
+
+        if (!response.ok) {
+            throw new Error(`Error HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        const online = data.presence_count || 0;
+
+        onlineCountEl.textContent = online.toLocaleString();
+
+        // Color según cantidad (opcional)
+        if (online < 10) {
+            onlineCountEl.style.color = '#ff6666';
+        } else {
+            onlineCountEl.style.color = '#fff';
+        }
+
+    } catch (error) {
+        console.error('Error al obtener contador online:', error);
+        if (onlineCountEl) {
+            onlineCountEl.textContent = '---';
+        }
+    }
+}
+
+// Actualizar cada 40 segundos
+setInterval(updateOnlineCount, 40000);
+
+// Ejecutar al cargar la página con pequeño retraso
+window.addEventListener('load', () => {
+    setTimeout(updateOnlineCount, 1500);
+});
+
+// script.js es este

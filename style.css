@@ -15,6 +15,71 @@ body {
     position: relative;
 }
 
+/* ========== ANIMACIONES ADICIONALES ========== */
+@keyframes cursedParticleFade {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-50px) scale(0);
+    }
+}
+
+@keyframes trailFade {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ========== TEMAS ========== */
+body.theme-light {
+    background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 50%, #f0f0f0 100%);
+    color: #222;
+}
+
+body.theme-light h1,
+body.theme-light .welcome-title {
+    filter: brightness(0.8) contrast(1.2);
+}
+
+body.theme-light .navbar {
+    background: rgba(240, 240, 240, 0.95);
+    border-bottom-color: rgba(138, 43, 226, 0.3);
+}
+
+body.theme-light .nav-link {
+    color: #333;
+}
+
+body.theme-shibuya {
+    background: linear-gradient(135deg, #1a0000 0%, #000000 50%, #0a0000 100%);
+    color: #ff4d4d;
+}
+
+body.theme-shibuya::before {
+    background: 
+        radial-gradient(circle at 30% 70%, rgba(255, 0, 0, 0.2), transparent),
+        radial-gradient(circle at 70% 30%, rgba(139, 0, 0, 0.2), transparent);
+}
+
 body::before {
     content: '';
     position: absolute;
@@ -310,6 +375,118 @@ body::before {
     text-transform: uppercase;
 }
 
+/* ========== MODAL DE CONFIGURACIÓN ========== */
+.config-modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease;
+}
+
+.config-modal-content {
+    background: linear-gradient(135deg, #1a0a1a 0%, #0a0a1a 100%);
+    margin: 5% auto;
+    padding: 40px;
+    border: 2px solid #8a2be2;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 0 50px rgba(138, 43, 226, 0.5);
+    animation: slideDown 0.4s ease;
+    position: relative;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.config-modal-content h2 {
+    color: #00ffff;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-align: center;
+}
+
+.config-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: rgba(138, 43, 226, 0.1);
+    border: 2px solid rgba(138, 43, 226, 0.3);
+    border-radius: 10px;
+}
+
+.config-section h3 {
+    color: #ff0066;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.config-option {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.config-option label {
+    color: #fff;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+    min-width: 120px;
+}
+
+.config-option input[type="radio"],
+.config-option input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #8a2be2;
+}
+
+.config-option input[type="color"] {
+    width: 80px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.radio-label:hover {
+    background: rgba(138, 43, 226, 0.3);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
 /* Navbar */
 .navbar {
     position: fixed;
@@ -528,6 +705,11 @@ body.mobile-mode .subtitle-inline {
     
     .loading-bar {
         width: 250px;
+    }
+
+    .config-modal-content {
+        width: 95%;
+        padding: 25px 20px;
     }
 }
 
@@ -1466,6 +1648,7 @@ h1::before {
         bottom: 85px;
     }
 }
+
 .dusk-text {
     font-family: 'Courier New', monospace;
     font-size: 4rem;
@@ -1567,3 +1750,71 @@ h1::before {
         filter: blur(1.5px);
     }
 }
+/* ========== CURSOR PERSONALIZADO GOJO CHIBI NEON ========== */
+#customGojoCursor {
+    position: fixed;
+    width: 76px;                /* Tamaño pequeño */
+    height: 76px;
+    background-image: url('https://cdn.discordapp.com/attachments/1070900440176283688/1468848454251057284/Chibi_Jujutsu_Kaisen_Satoru_Gojo_and_Prison_Realm_cursors___Custom_Cursor-removebg-preview.png?ex=69858339&is=698431b9&hm=b99f22bad18131c920a7052badfb27461b151e3505408bf67b988f2fcaa9ba31&');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    pointer-events: none;
+    z-index: 999999;
+    transform: translate(-50%, -50%); /* Centrado en el puntero */
+    transition: transform 0.05s ease;
+    filter: drop-shadow(0 0 8px #00ffff) 
+            drop-shadow(0 0 14px #00ffff) 
+            drop-shadow(0 0 22px #7b68ee) 
+            drop-shadow(0 0 32px #8a2be2);
+    animation: neonPulse 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes neonPulse {
+    0% { filter: drop-shadow(0 0 6px #00ffff) drop-shadow(0 0 12px #00ffff) drop-shadow(0 0 20px #7b68ee); }
+    100% { filter: drop-shadow(0 0 10px #00ffff) drop-shadow(0 0 18px #00ffff) drop-shadow(0 0 28px #8a2be2) drop-shadow(0 0 38px #7b68ee); }
+}
+
+/* Al hacer click */
+#customGojoCursor:active {
+    transform: translate(-50%, -50%) scale(0.85);
+}
+.online-counter {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 16px;
+    border-radius: 30px;
+    border: 2px solid #00ffff;
+    color: #00ffff;
+    font-weight: bold;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+    white-space: nowrap;
+}
+
+.online-counter span {
+    color: #fff;
+    font-weight: 900;
+}
+
+.online-counter::before {
+    content: '🟢';
+    animation: onlinePulse 2s infinite;
+}
+
+@keyframes onlinePulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .online-counter {
+        font-size: 0.85rem;
+        padding: 6px 12px;
+    }
+}
+
+/* Fin del archivo style.css */

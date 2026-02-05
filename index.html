@@ -438,7 +438,7 @@
     <!-- Pantalla de carga -->
     <div class="loading-screen" id="loadingScreen">
         <div class="loading-content">
-            <img src="https://cdn.discordapp.com/attachments/1465647525766631585/1468370793045164177/jujutsu-kaisen-characters.gif?ex=6983c65e&is=698274de&hm=97a9bab60602acf4ff8a3d2070bc3b5cbf04304ed2ab283616cdfcc80b1f4373&" 
+            <img src="https://cdn.discordapp.com/attachments/1465647525766631585/1468370793045164177/jujutsu-kaisen-characters.gif?ex=698517de&is=6983c65e&hm=5c27ca2ee295607b5e74a2708141aef8161031e60b0d4adb689bb4854ace9262&" 
                  alt="Loading..." 
                  class="loading-gif">
             <div class="loading-text">Cargando...</div>
@@ -471,6 +471,7 @@
     <!-- Menú de navegación -->
     <nav class="navbar">
         <div class="nav-container">
+        
             <a href="#" class="nav-link" data-section="sugerencias">Sugerencias</a>
             <a href="#" class="nav-link" id="quejasBtn">Quejas</a>
             <a href="https://discord.gg/NfrSQ922Hs" target="_blank" class="nav-link">Servidor</a>
@@ -479,16 +480,102 @@
             <a href="#" class="nav-link" id="statsBtn">📊 Stats</a>
             <a href="#" class="nav-link" id="secretsBtn">🔮 Secretos</a>
             <a href="#" class="nav-link" id="gamesBtn">🎮 Juegos</a>
-            <a href="#" class="nav-link" id="resetDevice">⚙️</a>
+            <a href="#" class="nav-link" id="configBtn">⚙️ Ajustes</a>
+            <a href="#" class="nav-link" id="musicPlayerBtn">🎵 Música</a>
+<a href="#" class="nav-link" id="forumBtn">💬 Foro</a>
+<a href="#" class="nav-link" id="themesBtn">🎨 Temas</a>
+<span id="onlineCounter" class="online-counter">
+    Online: <span id="onlineCount">---</span>
+</span>
+
         </div>
     </nav>
+
+    <!-- Modal de Configuración -->
+    <div id="configModal" class="modal config-modal">
+        <div class="modal-content config-modal-content">
+            <span class="close-btn" id="configCloseBtn">&times;</span>
+            <h2>⚙️ Configuración</h2>
+            
+            <!-- Sección: Selección de Dispositivo -->
+            <div class="config-section">
+                <h3>📱 Tipo de Dispositivo</h3>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="deviceType" value="pc-mode">
+                        <span>🖥️ PC / Laptop</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="deviceType" value="mobile-mode">
+                        <span>📱 Móvil / Tablet</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Sección: Tema -->
+            <div class="config-section">
+                <h3>🎨 Tema Visual</h3>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="themeType" value="dark" checked>
+                        <span>🌙 Oscuro (predeterminado)</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="themeType" value="light">
+                        <span>☀️ Claro</span>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="themeType" value="shibuya">
+                        <span>🔴 Shibuya (rojo-negro)</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Sección: Color Personalizado -->
+            <div class="config-section">
+                <h3>🎨 Color de Fondo Personalizado</h3>
+                <div class="config-option">
+                    <label>Color:</label>
+                    <input type="color" id="customBgColor" value="#0a0a0a">
+                </div>
+                <p style="color: #aaa; font-size: 0.85rem; margin-top: 10px; font-family: Arial, sans-serif;">
+                    Nota: Esto sobrescribirá el tema seleccionado
+                </p>
+            </div>
+
+            <!-- Sección: Efectos Visuales -->
+            <div class="config-section">
+                <h3>✨ Efectos Visuales</h3>
+                <div class="config-option">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="cursedEffectsToggle" checked>
+                        <span>⚡ Partículas de energía maldita al hacer scroll</span>
+                    </label>
+                </div>
+                <div class="config-option">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="customCursorToggle" checked>
+                        <span>👆 Cursor personalizado con efecto de energía</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Sección: Iniciar Sesión (Próximamente) -->
+            <div class="config-section">
+                <h3>🔐 Cuenta (Próximamente)</h3>
+                <p style="color: #aaa; font-size: 0.9rem; font-family: Arial, sans-serif; line-height: 1.6;">
+                    La función de inicio de sesión estará disponible pronto. Podrás crear una cuenta para guardar tus preferencias, estadísticas y logros en la nube.
+                </p>
+            </div>
+        </div>
+    </div>
 
     <!-- Chat Flotante -->
     <div class="floating-chat" id="floatingChat">
         <div class="floating-chat-header">
             <div class="floating-chat-header-content">
                 <div class="floating-chat-avatar">
-                    <img src="https://cdn.discordapp.com/attachments/1465647525766631585/1468389070169440319/s.jpg?ex=6983d763&is=698285e3&hm=7ae917753c12f738264191cf56ee65ec8c32d9d5df97a9e6a816b0b528a5d86d&" alt="Gojo">
+                    <img src="https://cdn.discordapp.com/attachments/1465647525766631585/1469054178717601933/Gojo__Jujutsu_Kaisen_.jpg?ex=698642d1&is=6984f151&hm=ea034cc68235b5afc5a539927ecff513af13043921d89eb6017ae6eb0a51b0bc&" alt="Gojo">
                     <div class="floating-chat-status"></div>
                 </div>
                 <div class="floating-chat-title">
@@ -539,7 +626,7 @@
         <div class="speech-bubble" id="speechBubble">
             ¡Hola! ¿Necesitas ayuda?
         </div>
-        <img src="https://cdn.discordapp.com/attachments/1070900440176283688/1468325551864549376/descarga-removebg-preview.png?ex=69839c3b&is=69824abb&hm=2f26cb655bc4fbee313f18d29ae7b4436e09a78027200f69cd5580ac5a36b08a&" 
+        <img src="https://cdn.discordapp.com/attachments/1465647525766631585/1468708534421164216/descarga-removebg-preview.png?ex=698500e9&is=6983af69&hm=ed71d367b7760b6bd7e94fde7388153a5650e69c14da4dc4c5282c40346e12a5&" 
              alt="Asistente Chibi" 
              class="chibi-icon"
              id="chibiIcon">
@@ -554,7 +641,7 @@
         
         <!-- Imagen hero -->
         <div class="hero-image">
-            <img src="https://cdn.discordapp.com/attachments/1436664023532703755/1468344484222865560/image.png?ex=6983addd&is=69825c5d&hm=256889ad993caae48108976ed0407ad2e02c6cb7911bc999add8c700701a0037&" alt="Jujutsu Kaisen">
+            <img src="https://cdn.discordapp.com/attachments/1436664023532703755/1468344484222865560/image.png?ex=6984ff5d&is=6983addd&hm=89cea0e3db420810605b06e2d16e8c02acbd637473fff39acfaf6328f5820458&" alt="Jujutsu Kaisen">
         </div>
 
         <!-- Descripción del servidor -->
@@ -570,7 +657,7 @@
         </div>
     </div>
 
-    <!-- MODALES FALTANTES -->
+    <!-- MODALES -->
     
     <!-- Modal General -->
     <div id="modal" class="modal">
@@ -729,29 +816,30 @@
                     </div>
                     
                     <div class="secret-card" id="secretCard5">
-                    <div class="secret-lock">🔒</div>
-                    <div class="secret-icon">💀</div>
-                    <div class="secret-name">???</div>
-                </div>
+                        <div class="secret-lock">🔒</div>
+                        <div class="secret-icon">💀</div>
+                        <div class="secret-name">???</div>
+                    </div>
                 
-                <div class="secret-card" id="secretCard6">
-                    <div class="secret-lock">🔒</div>
-                    <div class="secret-icon">🌙</div>
-                    <div class="secret-name">???</div>
+                    <div class="secret-card" id="secretCard6">
+                        <div class="secret-lock">🔒</div>
+                        <div class="secret-icon">🌙</div>
+                        <div class="secret-name">???</div>
+                    </div>
                 </div>
-            </div>
 
                 <div class="secrets-progress">
                     <div class="progress-label">Progreso de Descubrimiento</div>
                     <div class="progress-bar-container">
                         <div class="progress-bar-fill" id="secretsProgress" style="width: 0%;"></div>
                     </div>
-                    <div class="progress-text" id="secretsText">0 / 5</div>
+                    <div class="progress-text" id="secretsText">0 / 6</div>
                 </div>
             </div>
         </div>
     </div>
-     <!-- Modal de Juegos -->
+    
+    <!-- Modal de Juegos -->
     <div id="gamesModal" class="modal">
         <div class="modal-content" style="max-width: 800px;">
             <span class="close-btn" id="gamesCloseBtn">&times;</span>
@@ -765,24 +853,120 @@
 
     <!-- Overlay de Easter Eggs -->
     <div class="easter-egg-overlay" id="easterEggOverlay"></div>
-    
- <script src="script.js"></script>
-    <script src="chat_ai.js"></script>
-    <script src="games.js"></script>
     <script>
-    // definición de emergencia
-    function sendFloatingSuggestion(text) {
-        const input = document.getElementById('floatingInput');
-        if (input) {
-            input.value = text;
-            // intenta llamar a la función real
-            if (typeof sendFloatingMessage === 'function') {
-                sendFloatingMessage();
-            } else {
-                console.error("sendFloatingMessage no está definida");
+        // Definición de emergencia
+        function sendFloatingSuggestion(text) {
+            const input = document.getElementById('floatingInput');
+            if (input) {
+                input.value = text;
+                // Intenta llamar a la función real
+                if (typeof sendFloatingMessage === 'function') {
+                    sendFloatingMessage();
+                } else {
+                    console.error("sendFloatingMessage no está definida");
+                }
             }
         }
+    </script>
+    <div id="themesModal" class="modal">
+    <div class="modal-content" style="max-width: 900px; max-height: 90vh; overflow-y: auto;">
+        <span class="close-btn" id="themesCloseBtn">&times;</span>
+        <h2 style="color: #00ffff; text-align: center; margin-bottom: 30px;">🎨 Selector de Temas</h2>
+        
+        <div id="themesGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px;">
+            <!-- Los temas se cargarán dinámicamente aquí -->
+        </div>
+        
+        <div style="margin-top: 40px; padding: 30px; background: rgba(138, 43, 226, 0.2); border-radius: 15px; border: 2px solid #8a2be2;">
+            <h3 style="color: #ff0066; margin-bottom: 20px;">✨ Crear Tema Personalizado</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                <div>
+                    <label style="color: #fff; font-size: 0.9rem; display: block; margin-bottom: 5px;">Fondo 1:</label>
+                    <input type="color" id="customBg1" value="#0a0a0a" style="width: 100%; height: 40px; border-radius: 5px; cursor: pointer;">
+                </div>
+                <div>
+                    <label style="color: #fff; font-size: 0.9rem; display: block; margin-bottom: 5px;">Fondo 2:</label>
+                    <input type="color" id="customBg2" value="#1a0a1a" style="width: 100%; height: 40px; border-radius: 5px; cursor: pointer;">
+                </div>
+                <div>
+                    <label style="color: #fff; font-size: 0.9rem; display: block; margin-bottom: 5px;">Primario:</label>
+                    <input type="color" id="customPrimary" value="#8a2be2" style="width: 100%; height: 40px; border-radius: 5px; cursor: pointer;">
+                </div>
+                <div>
+                    <label style="color: #fff; font-size: 0.9rem; display: block; margin-bottom: 5px;">Secundario:</label>
+                    <input type="color" id="customSecondary" value="#ff0066" style="width: 100%; height: 40px; border-radius: 5px; cursor: pointer;">
+                </div>
+            </div>
+            <button id="applyCustomThemeBtn" style="
+                background: linear-gradient(45deg, #8a2be2, #ff0066);
+                border: none; padding: 12px 30px; border-radius: 10px;
+                color: #fff; font-size: 1rem; font-weight: bold; cursor: pointer; width: 100%;
+            ">Aplicar Tema Personalizado</button>
+        </div>
+    </div>
+</div>
+<script>
+// ========== INICIALIZACIÓN DE NUEVAS FUNCIONALIDADES ==========
+
+// Event listeners para nuevos botones
+document.getElementById('musicPlayerBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    openMusicPlayer();
+});
+
+document.getElementById('forumBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    openForum();
+});
+
+document.getElementById('themesBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    openThemesModal();   // ahora sí existe
+});
+</script>
+<!-- Load dependencies first -->
+    <script src="script.js"></script>
+    <script src="chat_ai.js"></script>
+    <script src="games.js"></script>
+    <script src="themes.js"></script>
+    <script src="music_player.js"></script>
+    <script src="forum.js"></script>
+<!-- Then initialize listeners that depend on those files -->
+<script>
+document.getElementById('musicPlayerBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    openMusicPlayer();
+});
+
+document.getElementById('forumBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    openForum();
+});
+
+document.getElementById('themesBtn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    openThemesModal();
+});
+// ABRIR JUEGOS
+document.getElementById('gamesBtn')?.addEventListener('click', function(e) {
+    e.preventDefault();
+    const modal = document.getElementById('gamesModal');
+    if (modal) {
+        modal.style.display = 'block';
+        if (typeof cargarJuegos === 'function') {
+            cargarJuegos();           // carga las tarjetas
+        }
     }
+});
+
+// CERRAR JUEGOS (la X)
+const gamesCloseBtn = document.getElementById('gamesCloseBtn');
+if (gamesCloseBtn) {
+    gamesCloseBtn.addEventListener('click', function() {
+        const modal = document.getElementById('gamesModal');
+        if (modal) modal.style.display = 'none';
+    });
+}
 </script>
 </body>
 </html>
