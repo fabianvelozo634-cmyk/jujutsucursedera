@@ -560,13 +560,33 @@
                 </div>
             </div>
 
-            <!-- Sección: Iniciar Sesión (Próximamente) -->
-            <div class="config-section">
-                <h3>🔐 Cuenta (Próximamente)</h3>
-                <p style="color: #aaa; font-size: 0.9rem; font-family: Arial, sans-serif; line-height: 1.6;">
-                    La función de inicio de sesión estará disponible pronto. Podrás crear una cuenta para guardar tus preferencias, estadísticas y logros en la nube.
-                </p>
-            </div>
+            <!-- Sección: Iniciar Sesión con Discord -->
+<div class="config-section">
+    <h3>🔐 Iniciar Sesión</h3>
+    
+    <!-- Visible si NO estás logueado -->
+    <div id="loginContainer">
+        <button id="discordLoginBtn" class="discord-btn">
+            <img src="https://assets-global.website-files.com/6257adef7486f4d2a5b4d9f3/6257adef7486f4d2a5b4da66_discord-icon.svg" width="20" alt="Discord">
+            Iniciar sesión con Discord
+        </button>
+        <p style="color: #aaa; font-size: 0.85rem; margin-top: 10px; line-height: 1.5;">
+            Conéctate para guardar preferencias, ver tu rol y más funciones del servidor.
+        </p>
+    </div>
+
+    <!-- Visible DESPUÉS de loguear -->
+    <div id="userProfile" style="display: none; flex-direction: column; align-items: center; gap: 12px; margin-top: 15px;">
+        <img id="userAvatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Tu avatar" style="width: 70px; height: 70px; border-radius: 50%; border: 3px solid #5865F2;">
+        <div style="text-align: center;">
+            <div id="userName" style="font-size: 1.2rem; font-weight: bold; color: #fff;">Usuario#0000</div>
+            <div id="userStatus" style="color: #aaa; font-size: 0.9rem;">Conectado (demo)</div>
+        </div>
+        <button id="logoutBtn" class="logout-btn">
+            Cerrar sesión
+        </button>
+    </div>
+</div>
         </div>
     </div>
 

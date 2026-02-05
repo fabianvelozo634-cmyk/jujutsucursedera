@@ -6,7 +6,7 @@ const musicLibrary = {
             id: 'op1',
             title: 'Kaikai Kitan',
             artist: 'Eve',
-            url: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468689844812386444/ytmp3free.cc_eve-mv-youtubemp3free.org.mp3?ex=6984ef81&is=69839e01&hm=f3ef642363b1a643854709d8741ddae7f4dc3a95e1100c583ccd4f3a7dda7daf&', // Reemplazar con URLs reales
+            url: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468689844812386444/ytmp3free.cc_eve-mv-youtubemp3free.org.mp3?ex=69859841&is=698446c1&hm=11b56c5586765ce5d826cb1bc4381940e2071eced331af06413a70c717d8051a&', // Reemplazar con URLs reales
             duration: '3:38',
             type: 'opening',
             season: 1
@@ -15,7 +15,7 @@ const musicLibrary = {
             id: 'op2',
             title: 'Vivid Vice',
             artist: 'Who-ya Extended',
-            url: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468689845407973530/ytmp3free.cc_jujutsu-kaisen-opening-2-vivid-vice-youtubemp3free.org.mp3?ex=6984ef82&is=69839e02&hm=c1cdb0aa5a710e590a4610ae5b227d62225534434beb33f0780e48a27f52974b&',
+            url: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468689845407973530/ytmp3free.cc_jujutsu-kaisen-opening-2-vivid-vice-youtubemp3free.org.mp3?ex=69859842&is=698446c2&hm=034b158dbf314112841d422d3ea60bbd5c0cdb5ab44f0e92a8c2ec91c191d832&',
             duration: '3:27',
             type: 'opening',
             season: 2
@@ -24,7 +24,7 @@ const musicLibrary = {
             id: 'op3',
             title: 'Ao no Sumika',
             artist: 'Tatsuya Kitani',
-            url: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468689845751775396/ytmp3free.cc_tv2opop1156mbstbs28-youtubemp3free.org.mp3?ex=6984ef82&is=69839e02&hm=2774f8320aef13d4a4da1ae355f3988610908e9a6e8cd4a602e33ecf1661e00b&',
+            url: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468689845751775396/ytmp3free.cc_tv2opop1156mbstbs28-youtubemp3free.org.mp3?ex=69859842&is=698446c2&hm=c18a5d27c3bad43067c03b2cde8bf1be4b821505fa4855ed5ff7cb33257f0c59&',
             duration: '3:44',
             type: 'opening',
             season: 2
