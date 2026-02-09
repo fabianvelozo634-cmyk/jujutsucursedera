@@ -143,12 +143,12 @@ const secretCodes = {
 };
 
 const secretGifs = {
-    sukuna: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374458975912113/descarga.gif?ex=6985c408&is=69847288&hm=94fb49a1ac48f9f934867e44c27c31629e35cc5b32b4d6ebcc904e01225389e0&',
-    gojo: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374437433708781/descarga_1.gif?ex=69871582&is=6985c402&hm=6d5add167f6605da598c29553612540cf5ad34d72e07ecdda26ad13d4e5712f5&',
-    domain: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374411299000555/GOJO_USES_HIS_DOMAIN_EXPANSION___Jujutsu_Kaisen_-_4K_on_Make_a_GIF.gif?ex=6987157c&is=6985c3fc&hm=f73fae858b84afd3725c7639a3019a3a5b8ce615556e90ae514d1643af62919a&',
-    curse: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374418970509414/descarga_2.gif?ex=6987157e&is=6985c3fe&hm=c7d785388b820b95bd72c6821ed440f42d6e19a4d42a6fcf775febc9214f9a5c&',
-    era: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468377281310363841/yuta-okkotsu-cursed-energy.gif?ex=69871828&is=6985c6a8&hm=39e9de91f546d0d7029e563c47f5e774722792e0cb955aa57554c6671e33d810&',
-    dusk: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468395480898867250/descarga.jpg?ex=6987291c&is=6985d79c&hm=e6011fc71239a87d8f658c585edcc7659fd3afbb7311933e35d94465a2742252&'
+    sukuna: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374458975912113/descarga.gif?ex=698b0a08&is=6989b888&hm=e4b7a787109732b6fc283a013f2ef1da9701396c37572424c5441a3c7310df82&',
+    gojo: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374437433708781/descarga_1.gif?ex=698b0a02&is=6989b882&hm=379d4085214249019ebde9cb16227033b06d48286300661577b76539a5da8aca&',
+    domain: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374411299000555/GOJO_USES_HIS_DOMAIN_EXPANSION___Jujutsu_Kaisen_-_4K_on_Make_a_GIF.gif?ex=698b09fc&is=6989b87c&hm=9aac0dfafa8039edab206225940b3bd31efc02bcba99a602505744721c921d23&',
+    curse: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468374418970509414/descarga_2.gif?ex=698b09fe&is=6989b87e&hm=5af7f4b886ab2dfaf5600ea85f23a7ce271236292e4d4da9ca14cb669edb3169&',
+    era: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468377281310363841/yuta-okkotsu-cursed-energy.gif?ex=698b0ca8&is=6989bb28&hm=03a64fba80899e588054e63882d659ab6bfb1aca33bb13e57f84a63d12fe8e98&',
+    dusk: 'https://cdn.discordapp.com/attachments/1465647525766631585/1468395480898867250/descarga.jpg?ex=698b1d9c&is=6989cc1c&hm=4257b3f416db0e3f31165997b054b6920c9a51b3fe64bf004637e59e3b3d0074&'
 }; 
 
 const secretNames = {
