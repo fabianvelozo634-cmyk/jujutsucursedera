@@ -13,7 +13,7 @@ let floatingConversation = [];
 let isFloatingProcessing = false;
 
 // ──── Configuración ────
-const GROQ_API_KEY = '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';
+const GROQ_API_KEY = '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';
 
 const floatingSystemPrompt = `Eres un asistente IA experto en Jujutsu Kaisen y el servidor de roleplay "Jujutsu Kaisen Cursed Era II". Siempre respondes en español.
 
