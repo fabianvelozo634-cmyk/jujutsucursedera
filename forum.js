@@ -1,18 +1,52 @@
-// ========== SISTEMA DE FORO SIMPLIFICADO ==========
+// ========== SISTEMA DE FORO GLOBAL (CON BACKEND) ==========
 
 class ForumSystem {
-    constructor() {
+    constructor(useBackend = true) {
         this.posts = [];
+        this.useBackend = useBackend;
         this.loadPosts();
     }
 
-    loadPosts() {
-        const saved = localStorage.getItem('forumPosts');
-        this.posts = saved ? JSON.parse(saved) : [];
+    async loadPosts() {
+        if (this.useBackend) {
+            try {
+                const response = await fetch('/api/forum/posts', {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    this.posts = data.posts || [];
+                } else {
+                    console.error('Error cargando posts del servidor');
+                    this.posts = [];
+                }
+            } catch (error) {
+                console.error('Error en loadPosts:', error);
+                this.posts = [];
+            }
+        } else {
+            // Fallback a localStorage si el backend no está disponible
+            const saved = localStorage.getItem('forumPosts');
+            this.posts = saved ? JSON.parse(saved) : [];
+        }
     }
 
-    savePosts() {
-        localStorage.setItem('forumPosts', JSON.stringify(this.posts));
+    async savePosts() {
+        if (this.useBackend) {
+            try {
+                await fetch('/api/forum/posts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ posts: this.posts })
+                });
+            } catch (error) {
+                console.error('Error guardando posts:', error);
+            }
+        } else {
+            localStorage.setItem('forumPosts', JSON.stringify(this.posts));
+        }
     }
 
     createPost(author, content, authorAvatar = '👤') {
@@ -129,7 +163,7 @@ function createForumModal() {
     modal.innerHTML = `
         <div class="modal-content" style="max-width: 900px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column;">
             <span class="close-btn" id="forumCloseBtn">&times;</span>
-            <h2 style="color: #00ffff; text-align: center; margin-bottom: 20px;">💬 Foro de la Comunidad</h2>
+            <h2 style="color: #00ffff; text-align: center; margin-bottom: 20px;">💬 Foro Global de la Comunidad</h2>
             
             <!-- Crear Post -->
             <div style="background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(255, 0, 102, 0.3)); padding: 20px; border-radius: 15px; margin-bottom: 20px; border: 2px solid #8a2be2;">
@@ -165,7 +199,7 @@ function createForumModal() {
                         <option value="🌀">🌀</option>
                     </select>
                 </div>
-                <textarea id="forumPostContent" placeholder="Escribe algo interesante..." maxlength="500" style="
+                <textarea id="forumPostContent" placeholder="Escribe algo interesante... (visible para TODOS)" maxlength="500" style="
                     width: 100%;
                     min-height: 100px;
                     padding: 15px;
@@ -226,128 +260,116 @@ function renderPost(post, forum, userId) {
     
     postElement.innerHTML = `
         <div style="display: flex; gap: 15px;">
-            <div style="font-size: 3rem; flex-shrink: 0;">${post.authorAvatar}</div>
+            <div style="font-size: 2rem; flex-shrink: 0;">${post.authorAvatar}</div>
             <div style="flex: 1;">
-                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
                     <div>
-                        <div style="font-size: 1.1rem; font-weight: bold; color: #00ffff; margin-bottom: 3px;">${post.author}</div>
-                        <div style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.5);">${forum.formatTimestamp(post.timestamp)}</div>
+                        <strong style="color: #00ffff; font-size: 1.05rem;">${escapeHtml(post.author)}</strong>
+                        <span style="color: rgba(255, 255, 255, 0.5); font-size: 0.85rem; margin-left: 10px;">🌍 Global • ${forum.formatTimestamp(post.timestamp)}</span>
                     </div>
-                    ${isAuthor ? `
-                        <button class="delete-post-btn" data-post-id="${post.id}" style="
-                            background: rgba(255, 0, 0, 0.3);
-                            border: 2px solid rgba(255, 0, 0, 0.5);
-                            padding: 6px 12px;
-                            border-radius: 8px;
-                            color: #fff;
-                            font-size: 0.85rem;
-                            cursor: pointer;
-                            transition: all 0.3s;
-                        ">🗑️ Eliminar</button>
-                    ` : ''}
+                    ${isAuthor ? `<button class="delete-post-btn" data-post-id="${post.id}" style="
+                        background: rgba(255, 0, 0, 0.3);
+                        border: 1px solid rgba(255, 0, 0, 0.5);
+                        padding: 5px 10px;
+                        border-radius: 5px;
+                        color: #ff6666;
+                        cursor: pointer;
+                        font-size: 0.8rem;
+                    ">🗑️ Eliminar</button>` : ''}
                 </div>
-                <div style="color: #fff; font-size: 1rem; line-height: 1.6; margin-bottom: 15px; white-space: pre-wrap;">${escapeHtml(post.content)}</div>
-                
-                <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+                <p style="color: #fff; margin: 12px 0; line-height: 1.5;">${escapeHtml(post.content)}</p>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
                     <button class="like-btn" data-post-id="${post.id}" style="
-                        background: ${isLiked ? 'rgba(255, 0, 102, 0.4)' : 'rgba(138, 43, 226, 0.3)'};
-                        border: 2px solid ${isLiked ? '#ff0066' : '#8a2be2'};
+                        background: rgba(138, 43, 226, 0.3);
+                        border: 1px solid rgba(138, 43, 226, 0.5);
                         padding: 8px 15px;
-                        border-radius: 20px;
+                        border-radius: 8px;
                         color: #fff;
-                        font-size: 0.95rem;
+                        font-size: 0.9rem;
                         cursor: pointer;
-                        transition: all 0.3s;
-                        display: flex;
-                        align-items: center;
-                        gap: 8px;
                     ">${isLiked ? '❤️' : '🤍'} ${post.likes}</button>
-                    
                     <button class="reply-toggle-btn" data-post-id="${post.id}" style="
-                        background: rgba(0, 255, 255, 0.2);
-                        border: 2px solid rgba(0, 255, 255, 0.4);
+                        background: rgba(0, 255, 255, 0.3);
+                        border: 1px solid rgba(0, 255, 255, 0.5);
                         padding: 8px 15px;
-                        border-radius: 20px;
+                        border-radius: 8px;
                         color: #fff;
-                        font-size: 0.95rem;
+                        font-size: 0.9rem;
                         cursor: pointer;
-                        transition: all 0.3s;
-                    ">💬 Responder (${post.replies.length})</button>
-                </div>
-                
-                <!-- Sección de Respuestas -->
-                <div class="replies-section" data-post-id="${post.id}" style="display: none; margin-top: 20px;">
-                    <!-- Formulario de respuesta -->
-                    <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
-                        <textarea class="reply-input" placeholder="Escribe tu respuesta..." maxlength="300" style="
-                            width: 100%;
-                            min-height: 60px;
-                            padding: 12px;
-                            background: rgba(0, 0, 0, 0.5);
-                            border: 2px solid rgba(138, 43, 226, 0.5);
-                            border-radius: 8px;
-                            color: #fff;
-                            font-size: 0.9rem;
-                            font-family: Arial, sans-serif;
-                            resize: vertical;
-                            outline: none;
-                            margin-bottom: 10px;
-                        "></textarea>
-                        <button class="send-reply-btn" data-post-id="${post.id}" style="
-                            background: linear-gradient(45deg, #8a2be2, #ff0066);
-                            border: none;
-                            padding: 8px 20px;
-                            border-radius: 8px;
-                            color: #fff;
-                            font-size: 0.9rem;
-                            font-weight: bold;
-                            cursor: pointer;
-                        ">Enviar</button>
-                    </div>
-                    
-                    <!-- Lista de respuestas -->
-                    <div class="replies-list">
-                        ${post.replies.map(reply => renderReply(reply, post.id, forum, userId)).join('')}
-                    </div>
+                    ">💬 ${post.replies.length}</button>
                 </div>
             </div>
         </div>
+        
+        <!-- Respuestas -->
+        <div class="replies-section" data-post-id="${post.id}" style="display: none; margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(138, 43, 226, 0.3);">
+            <div class="replies-list" style="margin-bottom: 15px; max-height: 200px; overflow-y: auto;"></div>
+            <div style="display: flex; gap: 10px;">
+                <textarea class="reply-input" placeholder="Escribe una respuesta..." maxlength="300" style="
+                    flex: 1;
+                    padding: 10px;
+                    background: rgba(0, 0, 0, 0.5);
+                    border: 1px solid rgba(138, 43, 226, 0.3);
+                    border-radius: 8px;
+                    color: #fff;
+                    font-size: 0.9rem;
+                    resize: vertical;
+                    outline: none;
+                    min-height: 50px;
+                "></textarea>
+                <button class="send-reply-btn" data-post-id="${post.id}" style="
+                    background: rgba(0, 255, 255, 0.3);
+                    border: 1px solid rgba(0, 255, 255, 0.5);
+                    padding: 10px 20px;
+                    border-radius: 8px;
+                    color: #fff;
+                    font-size: 0.9rem;
+                    cursor: pointer;
+                ">📤</button>
+            </div>
+        </div>
     `;
+    
+    // Renderizar respuestas
+    const repliesList = postElement.querySelector('.replies-list');
+    post.replies.forEach(reply => {
+        const replyElement = document.createElement('div');
+        const isReplyLiked = reply.likedBy.includes(userId);
+        
+        replyElement.style.cssText = `
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #00ffff;
+        `;
+        
+        replyElement.innerHTML = `
+            <div style="display: flex; gap: 10px;">
+                <span style="font-size: 1.5rem;">${reply.authorAvatar}</span>
+                <div style="flex: 1;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <strong style="color: #00ffff; font-size: 0.95rem;">${escapeHtml(reply.author)}</strong>
+                        <span style="color: rgba(255, 255, 255, 0.4); font-size: 0.75rem;">${forum.formatTimestamp(reply.timestamp)}</span>
+                    </div>
+                    <p style="color: #fff; margin: 8px 0; font-size: 0.9rem;">${escapeHtml(reply.content)}</p>
+                    <button class="like-reply-btn" data-post-id="${post.id}" data-reply-id="${reply.id}" style="
+                        background: transparent;
+                        border: none;
+                        padding: 0;
+                        color: ${isReplyLiked ? '#ff4081' : '#fff'};
+                        font-size: 0.8rem;
+                        cursor: pointer;
+                        margin-top: 5px;
+                    ">${isReplyLiked ? '❤️' : '🤍'} ${reply.likes}</button>
+                </div>
+            </div>
+        `;
+        
+        repliesList.appendChild(replyElement);
+    });
     
     return postElement;
-}
-
-// Renderizar respuesta
-function renderReply(reply, postId, forum, userId) {
-    const isLiked = reply.likedBy.includes(userId);
-    
-    return `
-        <div style="
-            background: rgba(0, 0, 0, 0.3);
-            border-left: 3px solid #8a2be2;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-        ">
-            <div style="display: flex; gap: 10px; margin-bottom: 8px;">
-                <div style="font-size: 1.5rem;">${reply.authorAvatar}</div>
-                <div style="flex: 1;">
-                    <div style="font-size: 0.95rem; font-weight: bold; color: #00ffff;">${reply.author}</div>
-                    <div style="font-size: 0.75rem; color: rgba(255, 255, 255, 0.5);">${forum.formatTimestamp(reply.timestamp)}</div>
-                </div>
-            </div>
-            <div style="color: #fff; font-size: 0.9rem; line-height: 1.5; margin-bottom: 10px; white-space: pre-wrap;">${escapeHtml(reply.content)}</div>
-            <button class="like-reply-btn" data-post-id="${postId}" data-reply-id="${reply.id}" style="
-                background: ${isLiked ? 'rgba(255, 0, 102, 0.4)' : 'rgba(138, 43, 226, 0.2)'};
-                border: 2px solid ${isLiked ? '#ff0066' : 'rgba(138, 43, 226, 0.4)'};
-                padding: 5px 12px;
-                border-radius: 15px;
-                color: #fff;
-                font-size: 0.8rem;
-                cursor: pointer;
-            ">${isLiked ? '❤️' : '🤍'} ${reply.likes}</button>
-        </div>
-    `;
 }
 
 // Escape HTML para prevenir XSS
@@ -358,12 +380,14 @@ function escapeHtml(text) {
 }
 
 // Renderizar todos los posts
-function renderAllPosts(forum, userId) {
+async function renderAllPosts(forum, userId) {
     const container = document.getElementById('forumPostsList');
     if (!container) return;
     
     container.innerHTML = '';
     
+    // Recargar posts del servidor
+    await forum.loadPosts();
     const posts = forum.getPosts();
     
     if (posts.length === 0) {
@@ -427,7 +451,7 @@ function setupPostEventListeners(forum, userId) {
             forum.addReply(postId, username, content, avatar);
             textarea.value = '';
             renderAllPosts(forum, userId);
-            showForumNotification('✅ Respuesta publicada');
+            showForumNotification('✅ Respuesta publicada globalmente');
         });
     });
     
@@ -493,9 +517,20 @@ function showForumNotification(message, type = 'success') {
 let forumSystem;
 let currentUserId;
 
-function initForum() {
+async function initForum() {
     const modal = createForumModal();
-    forumSystem = new ForumSystem();
+    
+    // Detectar si el backend está disponible
+    let useBackend = false;
+    try {
+        const response = await fetch('/api/health');
+        useBackend = response.ok;
+    } catch (error) {
+        console.warn('Backend no disponible, usando localStorage');
+        useBackend = false;
+    }
+    
+    forumSystem = new ForumSystem(useBackend);
     
     // Generar o recuperar ID de usuario
     currentUserId = localStorage.getItem('forumUserId') || `user_${Date.now()}`;
@@ -535,7 +570,8 @@ function initForum() {
         charCount.textContent = '0 / 500';
         
         renderAllPosts(forumSystem, currentUserId);
-        showForumNotification('✅ Publicación creada exitosamente');
+        const backendMsg = useBackend ? 'globalmente' : '(en este navegador)';
+        showForumNotification(`✅ Publicación creada ${backendMsg}`);
     });
     
     // Cerrar modal
@@ -550,7 +586,16 @@ function initForum() {
     });
     
     // Renderizar posts iniciales
-    renderAllPosts(forumSystem, currentUserId);
+    await renderAllPosts(forumSystem, currentUserId);
+    
+    // Actualizar posts cada 5 segundos si hay backend
+    if (useBackend) {
+        setInterval(() => {
+            if (modal.style.display === 'block') {
+                renderAllPosts(forumSystem, currentUserId);
+            }
+        }, 5000);
+    }
 }
 
 // Función para abrir el foro
@@ -568,4 +613,3 @@ window.addEventListener('load', initForum);
 // Exportar funciones
 window.openForum = openForum;
 window.forumSystem = forumSystem;
-// este es el forum.js
